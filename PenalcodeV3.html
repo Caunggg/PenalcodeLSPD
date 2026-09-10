@@ -1,0 +1,3824 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator Penal & Vehicle Code</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #0f1419;
+        color: #e6e6e6;
+        min-height: 100vh;
+        padding: 16px;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+        color: #4fc3f7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      h1 svg {
+        flex-shrink: 0;
+        display: block;
+      }
+      .subtitle {
+        text-align: center;
+        color: #888;
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+      }
+      .tabs {
+        display: flex;
+        gap: 6px;
+        background: #1a2332;
+        padding: 6px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .tab {
+        flex: 1;
+        padding: 12px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #8fa3b8;
+        transition: all 0.2s;
+        user-select: none;
+      }
+      .tab.active {
+        background: #4fc3f7;
+        color: #0f1419;
+      }
+      .panel {
+        display: none;
+      }
+      .panel.active {
+        display: block;
+      }
+      .card {
+        background: #1a2332;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 14px;
+        border: 1px solid #243447;
+      }
+      .card h2 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+        color: #4fc3f7;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      @media (max-width: 600px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      label {
+        display: block;
+        font-size: 0.8rem;
+        color: #8fa3b8;
+        margin-bottom: 4px;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        background: #0f1419;
+        border: 1px solid #2a3a4d;
+        border-radius: 8px;
+        color: #e6e6e6;
+        font-size: 0.95rem;
+        font-family: inherit;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: none;
+        border-color: #4fc3f7;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 60px;
+      }
+      button {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: inherit;
+      }
+      .btn-primary {
+        background: #4fc3f7;
+        color: #0f1419;
+      }
+      .btn-primary:hover {
+        background: #29b6f6;
+      }
+      .btn-danger {
+        background: #e53935;
+        color: #fff;
+      }
+      .btn-danger:hover {
+        background: #c62828;
+      }
+      .btn-secondary {
+        background: #2a3a4d;
+        color: #e6e6e6;
+      }
+      .btn-secondary:hover {
+        background: #374a61;
+      }
+      .btn-lock {
+        background: #ff9800;
+        color: #0f1419;
+      }
+      .btn-lock:hover {
+        background: #f57c00;
+      }
+      .btn-sm {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+      }
+      .btn-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      .filters {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .filter-chip {
+        padding: 6px 12px;
+        background: #0f1419;
+        border: 1px solid #2a3a4d;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        color: #8fa3b8;
+        transition: all 0.2s;
+        user-select: none;
+        font-weight: 600;
+      }
+      .filter-chip.active {
+        background: #4fc3f7;
+        color: #0f1419;
+        border-color: #4fc3f7;
+      }
+      .filter-chip.felony.active {
+        background: #e53935;
+        color: #fff;
+        border-color: #e53935;
+      }
+      .filter-chip.misd.active {
+        background: #ffb74d;
+        color: #0f1419;
+        border-color: #ffb74d;
+      }
+      .filter-chip.info.active {
+        background: #81c784;
+        color: #0f1419;
+        border-color: #81c784;
+      }
+      .filter-chip.pc.active {
+        background: #4fc3f7;
+        color: #0f1419;
+        border-color: #4fc3f7;
+      }
+      .filter-chip.vc.active {
+        background: #ba68c8;
+        color: #fff;
+        border-color: #ba68c8;
+      }
+      .filter-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .filter-label {
+        font-size: 0.7rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+      }
+      .list-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px;
+        background: #0f1419;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        border: 1px solid #243447;
+      }
+      .list-item input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+        cursor: pointer;
+        accent-color: #4fc3f7;
+        flex-shrink: 0;
+      }
+      .list-item .info {
+        flex: 1;
+        min-width: 0;
+      }
+      .list-item .code {
+        font-weight: 700;
+        color: #4fc3f7;
+        font-size: 0.9rem;
+      }
+      .list-item .desc {
+        font-size: 0.8rem;
+        color: #8fa3b8;
+        margin-top: 4px;
+        word-break: break-word;
+        line-height: 1.4;
+      }
+      .list-item .meta {
+        display: flex;
+        gap: 10px;
+        margin-top: 6px;
+        font-size: 0.78rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .meta-jail {
+        color: #ffb74d;
+      }
+      .meta-fine {
+        color: #81c784;
+      }
+      .meta-points {
+        color: #f06292;
+      }
+      .list-item .actions {
+        display: flex;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .badge.felony {
+        background: #e53935;
+        color: #fff;
+      }
+      .badge.misd {
+        background: #ffb74d;
+        color: #0f1419;
+      }
+      .badge.info {
+        background: #81c784;
+        color: #0f1419;
+      }
+      .badge.life {
+        background: #9c27b0;
+        color: #fff;
+        margin-left: 4px;
+      }
+      .badge.cat-pc {
+        background: #1e88e5;
+        color: #fff;
+      }
+      .badge.cat-vc {
+        background: #8e24aa;
+        color: #fff;
+      }
+      .vary-input {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+      }
+      .vary-input label {
+        font-size: 0.7rem;
+        color: #ba68c8;
+        margin: 0;
+      }
+      .vary-input input {
+        width: 70px;
+        padding: 4px 8px;
+        font-size: 0.85rem;
+      }
+      .result-card {
+        background: linear-gradient(135deg, #1e3a5f 0%, #1a2332 100%);
+        border: 1px solid #4fc3f7;
+      }
+      .result-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+        margin-top: 10px;
+      }
+      @media (max-width: 600px) {
+        .result-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .result-box {
+        background: #0f1419;
+        padding: 14px;
+        border-radius: 10px;
+        text-align: center;
+      }
+      .result-box .label {
+        font-size: 0.7rem;
+        color: #8fa3b8;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .result-box .value {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-top: 6px;
+        color: #ffb74d;
+      }
+      .result-box .value.fine {
+        color: #81c784;
+      }
+      .result-box .value.points {
+        color: #f06292;
+      }
+      .result-box .value.life {
+        color: #e91e63;
+        font-size: 1rem;
+      }
+      .selected-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: #0f1419;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        font-size: 0.85rem;
+        gap: 10px;
+      }
+      .selected-item .name {
+        flex: 1;
+        color: #e6e6e6;
+      }
+      .selected-item .val {
+        color: #8fa3b8;
+        font-size: 0.8rem;
+        text-align: right;
+        white-space: nowrap;
+      }
+      .empty {
+        text-align: center;
+        color: #666;
+        padding: 24px;
+        font-size: 0.9rem;
+      }
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #4fc3f7;
+        color: #0f1419;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: transform 0.3s;
+        z-index: 9999;
+      }
+      .toast.show {
+        transform: translateX(-50%) translateY(0);
+      }
+      .section-divider {
+        height: 1px;
+        background: #243447;
+        margin: 16px 0;
+      }
+      .suspect-chip {
+        display: inline-block;
+        padding: 10px 14px;
+        background: #0f1419;
+        border: 1px solid #2a3a4d;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 4px 6px 4px 0;
+        min-width: 180px;
+        transition: all 0.2s;
+        user-select: none;
+        vertical-align: top;
+      }
+      .suspect-chip:hover {
+        border-color: #4fc3f7;
+      }
+      .suspect-chip.active {
+        border-color: #4fc3f7;
+        background: #1e3a5f;
+        box-shadow: 0 0 0 1px #4fc3f7 inset;
+      }
+      .suspect-chip .sc-name {
+        font-weight: 700;
+        color: #e6e6e6;
+        font-size: 0.9rem;
+        word-break: break-word;
+      }
+      .suspect-chip.active .sc-name {
+        color: #4fc3f7;
+      }
+      .suspect-chip .sc-meta {
+        font-size: 0.72rem;
+        color: #8fa3b8;
+        margin-top: 4px;
+      }
+      #suspectTabs {
+        margin-bottom: 10px;
+        min-height: 20px;
+      }
+      .cat-label {
+        font-size: 0.75rem;
+        color: #4fc3f7;
+        margin: 18px 0 8px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #243447;
+      }
+      .cat-label:first-child {
+        margin-top: 0;
+      }
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .modal-overlay.show {
+        display: flex;
+      }
+      .modal-box {
+        background: #1a2332;
+        border: 1px solid #4fc3f7;
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      }
+      .modal-box h3 {
+        color: #4fc3f7;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+      .modal-box p {
+        color: #8fa3b8;
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+      .modal-box input[type="password"] {
+        width: 100%;
+        padding: 12px 14px;
+        background: #0f1419;
+        border: 1px solid #2a3a4d;
+        border-radius: 8px;
+        color: #e6e6e6;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        font-family: inherit;
+      }
+      .modal-box input[type="password"]:focus {
+        outline: none;
+        border-color: #4fc3f7;
+      }
+      .modal-error {
+        color: #e53935;
+        font-size: 0.8rem;
+        margin-top: 8px;
+        display: none;
+        padding: 8px 12px;
+        background: rgba(229, 57, 53, 0.1);
+        border-left: 3px solid #e53935;
+        border-radius: 4px;
+      }
+      .modal-error.show {
+        display: block;
+      }
+      .modal-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .modal-actions button {
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>
+<img src="https://i.ibb.co.com/k69C86sz/LSPD-SEALS.png" alt="LSPD" style="width:36px; height:36px; object-fit:contain;">
+          <path
+            d="M50 5 L90 20 L90 50 C90 75 70 92 50 98 C30 92 10 75 10 50 L10 20 Z"
+            fill="#1e40af"
+            stroke="#fbbf24"
+            stroke-width="4"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M50 15 L80 27 L80 50 C80 70 65 84 50 89 C35 84 20 70 20 50 L20 27 Z"
+            fill="#1e3a8a"
+            stroke="#fbbf24"
+            stroke-width="2"
+            stroke-linejoin="round"
+          />
+          <polygon
+            points="50,26 54,40 68,40 57,49 61,63 50,54 39,63 43,49 32,40 46,40"
+            fill="#fbbf24"
+          />
+          <text
+            x="50"
+            y="82"
+            text-anchor="middle"
+            font-size="13"
+            font-weight="900"
+            fill="#fbbf24"
+            font-family="Arial, sans-serif"
+            letter-spacing="0.5"
+          >
+            LSPD
+          </text>
+        </svg>
+        <span>Kalkulator Penal & Vehicle Code</span>
+      </h1>
+      <p class="subtitle">
+        Hitung total jail time, denda & poin SIM untuk satu atau lebih suspect
+      </p>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="calc">📋 Kalkulator</div>
+        <div class="tab" data-tab="manage">⚙️ Manajemen Kode</div>
+        <div class="tab" data-tab="info">📖 Penjelasan</div>
+      </div>
+
+      <!-- ============ PANEL KALKULATOR ============ -->
+      <div class="panel active" id="panel-calc">
+        <div class="card">
+          <h2>👥 Daftar Suspect (<span id="suspectCount">0</span>)</h2>
+          <div id="suspectTabs"></div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="addSuspect()">
+              ➕ Tambah Suspect
+            </button>
+            <button class="btn-secondary" onclick="renameSuspect()">
+              ✏️ Rename
+            </button>
+            <button class="btn-danger" onclick="deleteSuspect()">
+              🗑️ Hapus Suspect
+            </button>
+            <button
+              class="btn-danger"
+              onclick="restartApp()"
+              style="margin-left: auto"
+            >
+              🔄 Restart
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>
+            Pilih Kode untuk:
+            <span id="activeSuspectName" style="color: #4fc3f7">-</span>
+          </h2>
+          <input
+            type="text"
+            id="searchCalc"
+            placeholder="🔍 Cari kode / deskripsi..."
+            style="margin-bottom: 10px"
+          />
+          <div class="filter-row">
+            <span class="filter-label">Kategori:</span>
+            <div class="filters" id="filterCat">
+              <div class="filter-chip pc active" data-cat="all">Semua</div>
+              <div class="filter-chip pc" data-cat="PC">Penal Code</div>
+              <div class="filter-chip vc" data-cat="VC">Vehicle Code</div>
+            </div>
+          </div>
+          <div class="filter-row">
+            <span class="filter-label">Tipe:</span>
+            <div class="filters" id="filterCalc">
+              <div class="filter-chip active" data-filter="all">Semua</div>
+              <div class="filter-chip felony" data-filter="Felony">Felony</div>
+              <div class="filter-chip misd" data-filter="Misdemeanor">
+                Misdemeanor
+              </div>
+              <div class="filter-chip info" data-filter="Infraction">
+                Infraction
+              </div>
+            </div>
+          </div>
+          <div id="calcList"></div>
+        </div>
+
+        <div class="card result-card">
+          <h2>
+            Total Hukuman:
+            <span id="resultSuspectName" style="color: #4fc3f7">-</span>
+          </h2>
+          <div class="result-grid">
+            <div class="result-box">
+              <div class="label">Total Jail</div>
+              <div class="value" id="totalJail">0 menit</div>
+            </div>
+            <div class="result-box">
+              <div class="label">Total Denda</div>
+              <div class="value fine" id="totalFine">$0</div>
+            </div>
+            <div class="result-box">
+              <div class="label">Poin SIM</div>
+              <div class="value points" id="totalPoints">0</div>
+            </div>
+          </div>
+          <div class="section-divider"></div>
+          <div style="font-size: 0.85rem; color: #8fa3b8; margin-bottom: 8px">
+            Rincian:
+          </div>
+          <div id="detailList">
+            <div class="empty">Belum ada kode dipilih</div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="copyReport()">
+              📋 Copy Laporan Suspect Ini
+            </button>
+            <button class="btn-secondary" onclick="resetSelection()">
+              🔄 Reset Pilihan
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>📊 Ringkasan Semua Suspect</h2>
+          <div id="allSuspectsSummary">
+            <div class="empty">Belum ada suspect</div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="copyAllReport()">
+              📋 Copy Laporan Semua Suspect
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PANEL MANAJEMEN ============ -->
+      <div class="panel" id="panel-manage">
+        <div class="card">
+          <h2
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <span id="formTitleText">➕ Tambah Kode</span>
+            <button class="btn-lock btn-sm" onclick="lockManage()">
+              🔒 Lock
+            </button>
+          </h2>
+          <input type="hidden" id="editId" />
+          <div class="form-grid">
+            <div>
+              <label>Kategori</label>
+              <select id="inpCat">
+                <option value="PC">Penal Code</option>
+                <option value="VC">Vehicle Code</option>
+              </select>
+            </div>
+            <div>
+              <label>Tipe</label>
+              <select id="inpType">
+                <option value="Misdemeanor">Misdemeanor</option>
+                <option value="Felony">Felony</option>
+                <option value="Infraction">Infraction</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top: 10px">
+            <div>
+              <label>Kode</label>
+              <input type="text" id="inpCode" placeholder="Contoh: 101" />
+            </div>
+            <div>
+              <label>Poin SIM (opsional)</label>
+              <input type="number" id="inpPoints" min="0" step="1" value="0" />
+            </div>
+          </div>
+          <div style="margin-top: 10px">
+            <label>Judul / Deskripsi</label>
+            <input
+              type="text"
+              id="inpDesc"
+              placeholder="Contoh: Criminal Threats"
+            />
+          </div>
+          <div class="form-grid" style="margin-top: 10px">
+            <div>
+              <label>Jail Time (menit)</label>
+              <input type="number" id="inpJail" min="0" step="1" value="0" />
+            </div>
+            <div>
+              <label>Denda ($)</label>
+              <input type="number" id="inpFine" min="0" step="1" value="0" />
+            </div>
+          </div>
+          <div style="margin-top: 10px">
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+              "
+            >
+              <input
+                type="checkbox"
+                id="inpLife"
+                style="width: auto; accent-color: #9c27b0"
+              />
+              Hukuman Seumur Hidup (Life)
+            </label>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="savePc()" id="btnSave">
+              💾 Simpan
+            </button>
+            <button
+              class="btn-secondary"
+              onclick="clearForm()"
+              id="btnCancel"
+              style="display: none"
+            >
+              Batal
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Daftar Kode (<span id="pcCount">0</span>)</h2>
+          <input
+            type="text"
+            id="searchManage"
+            placeholder="🔍 Cari..."
+            style="margin-bottom: 12px"
+          />
+          <div id="manageList"></div>
+          <div class="btn-row">
+            <button class="btn-danger" onclick="resetDefault()">
+              ↺ Reset Kode ke Default
+            </button>
+            <button class="btn-danger" onclick="clearAll()">
+              🗑️ Hapus Semua Kode
+            </button>
+            <button
+              class="btn-danger"
+              onclick="restartApp()"
+              style="margin-left: auto; background: #b71c1c"
+            >
+              🔄 Restart Aplikasi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PANEL PENJELASAN ============ -->
+      <div class="panel" id="panel-info">
+        <div class="card">
+          <h2>📖 Daftar Lengkap Kode (<span id="infoCount">0</span>)</h2>
+          <input
+            type="text"
+            id="searchInfo"
+            placeholder="🔍 Cari kode / deskripsi..."
+            style="margin-bottom: 10px"
+          />
+          <div class="filter-row">
+            <span class="filter-label">Kategori:</span>
+            <div class="filters" id="filterCatInfo">
+              <div class="filter-chip pc active" data-cat="all">Semua</div>
+              <div class="filter-chip pc" data-cat="PC">Penal Code</div>
+              <div class="filter-chip vc" data-cat="VC">Vehicle Code</div>
+            </div>
+          </div>
+          <div class="filter-row">
+            <span class="filter-label">Tipe:</span>
+            <div class="filters" id="filterTypeInfo">
+              <div class="filter-chip active" data-filter="all">Semua</div>
+              <div class="filter-chip felony" data-filter="Felony">Felony</div>
+              <div class="filter-chip misd" data-filter="Misdemeanor">
+                Misdemeanor
+              </div>
+              <div class="filter-chip info" data-filter="Infraction">
+                Infraction
+              </div>
+            </div>
+          </div>
+          <div id="infoList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div class="modal-overlay" id="passwordModal">
+      <div class="modal-box">
+        <h3>🔒 Akses Terbatas</h3>
+        <p>
+          Masukkan password untuk membuka Manajemen Kode. Hanya personel
+          berwenang yang boleh mengubah daftar kode.
+        </p>
+        <input
+          type="password"
+          id="passwordInput"
+          placeholder="Password..."
+          autocomplete="off"
+        />
+        <div class="modal-error" id="passwordError">
+          ❌ Password salah! Coba lagi.
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" onclick="closePasswordModal()">
+            Batal
+          </button>
+          <button class="btn-primary" onclick="submitPassword()">
+            🔓 Buka
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      // ==================== DEFAULT PENAL CODE ====================
+      const DEFAULT_PCS = [
+        {
+          category: "PC",
+          code: "101",
+          type: "Misdemeanor",
+          desc: "Criminal Threats",
+          jail: 30,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "102",
+          type: "Misdemeanor",
+          desc: "Assault",
+          jail: 25,
+          fine: 600,
+        },
+        {
+          category: "PC",
+          code: "103",
+          type: "Misdemeanor",
+          desc: "Assault on a Peace Officer",
+          jail: 30,
+          fine: 650,
+        },
+        {
+          category: "PC",
+          code: "104",
+          type: "Misdemeanor",
+          desc: "Assault on a State Employee",
+          jail: 40,
+          fine: 700,
+        },
+        {
+          category: "PC",
+          code: "105",
+          type: "Felony",
+          desc: "Assault with a Deadly Weapon",
+          jail: 40,
+          fine: 1150,
+        },
+        {
+          category: "PC",
+          code: "106",
+          type: "Felony",
+          desc: "Assault with a Deadly Weapon on a Peace Officer",
+          jail: 50,
+          fine: 1200,
+        },
+        {
+          category: "PC",
+          code: "107",
+          type: "Misdemeanor",
+          desc: "Battery",
+          jail: 24,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "108",
+          type: "Misdemeanor",
+          desc: "Battery on a Peace Officer",
+          jail: 30,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "109",
+          type: "Misdemeanor",
+          desc: "Battery on a State Employee",
+          jail: 30,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "110(a)",
+          type: "Felony",
+          desc: "Aggravated Battery - kekerasan besar / berkelanjutan",
+          jail: 36,
+          fine: 850,
+        },
+        {
+          category: "PC",
+          code: "110(b)",
+          type: "Felony",
+          desc: "Aggravated Battery - dengan senjata / barang berbahaya",
+          jail: 48,
+          fine: 900,
+        },
+        {
+          category: "PC",
+          code: "111",
+          type: "Felony",
+          desc: "Manslaughter",
+          jail: 72,
+          fine: 1000,
+        },
+        {
+          category: "PC",
+          code: "112(a)",
+          type: "Felony",
+          desc: "False Imprisonment (dengan niat direncanakan / tebusan)",
+          jail: 36,
+          fine: 650,
+        },
+        {
+          category: "PC",
+          code: "112(b)",
+          type: "Misdemeanor",
+          desc: "False Imprisonment - penangkapan warga tidak sah",
+          jail: 12,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "113(a)",
+          type: "Felony",
+          desc: "Kidnapping - dengan kekuatan / ketakutan",
+          jail: 48,
+          fine: 650,
+        },
+        {
+          category: "PC",
+          code: "113(b)",
+          type: "Felony",
+          desc: "Kidnapping - untuk tebusan / pemerasan",
+          jail: 56,
+          fine: 660,
+        },
+        {
+          category: "PC",
+          code: "114",
+          type: "Felony",
+          desc: "Mayhem",
+          jail: 82,
+          fine: 1000,
+        },
+        {
+          category: "PC",
+          code: "115(a)",
+          type: "Misdemeanor",
+          desc: "Stalking - mengikuti / mengganggu",
+          jail: 12,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "115(b)",
+          type: "Misdemeanor",
+          desc: "Stalking - melanggar perintah penahanan",
+          jail: 16,
+          fine: 400,
+        },
+        {
+          category: "PC",
+          code: "116(a)",
+          type: "Felony",
+          desc: "Human Trafficking - memaksa kerja / seks",
+          jail: 36,
+          fine: 750,
+        },
+        {
+          category: "PC",
+          code: "116(b)",
+          type: "Felony",
+          desc: "Human Trafficking - menyelundupkan orang asing",
+          jail: 24,
+          fine: 660,
+        },
+        {
+          category: "PC",
+          code: "185",
+          type: "Misdemeanor",
+          desc: "Wearing a Mask or Disguise to Evade Police",
+          jail: 4,
+          fine: 150,
+        },
+        {
+          category: "PC",
+          code: "187(a)",
+          type: "Felony",
+          desc: "Murder - First Degree",
+          jail: 132,
+          fine: 1500,
+        },
+        {
+          category: "PC",
+          code: "187(b)",
+          type: "Felony",
+          desc: "Murder - Second Degree",
+          jail: 120,
+          fine: 1250,
+        },
+        {
+          category: "PC",
+          code: "187(c)",
+          type: "Felony",
+          desc: "Felony Murder",
+          jail: 120,
+          fine: 1300,
+        },
+        {
+          category: "PC",
+          code: "188(a)",
+          type: "Felony",
+          desc: "Attempted Murder - premeditasi",
+          jail: 56,
+          fine: 950,
+        },
+        {
+          category: "PC",
+          code: "188(b)",
+          type: "Felony",
+          desc: "Attempted Murder - kecelakaan kriminal / emosi",
+          jail: 48,
+          fine: 870,
+        },
+        {
+          category: "PC",
+          code: "211",
+          type: "Felony",
+          desc: "Robbery",
+          jail: 30,
+          fine: 650,
+        },
+        {
+          category: "PC",
+          code: "215",
+          type: "Felony",
+          desc: "Carjacking",
+          jail: 30,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "216",
+          type: "Felony",
+          desc: "Rape",
+          jail: 56,
+          fine: 540,
+        },
+        {
+          category: "PC",
+          code: "217",
+          type: "Misdemeanor",
+          desc: "Lewd Or Dissolute Conduct In Public",
+          jail: 12,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "218(a)",
+          type: "Misdemeanor",
+          desc: "Indecent Exposure - di tanah / area publik",
+          jail: 14,
+          fine: 300,
+        },
+        {
+          category: "PC",
+          code: "218(b)",
+          type: "Misdemeanor",
+          desc: "Indecent Exposure - di tanah pribadi tanpa izin",
+          jail: 12,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "218(c)",
+          type: "Felony",
+          desc: "Indecent Exposure - di depan anak di bawah umur",
+          jail: 18,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "219",
+          type: "Misdemeanor",
+          desc: "Sexual Assault",
+          jail: 24,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "220(a)",
+          type: "Misdemeanor",
+          desc: "Sexual Battery - sentuhan tidak diinginkan",
+          jail: 30,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "220(b)",
+          type: "Felony",
+          desc: "Sexual Battery - serangan untuk penggairahan",
+          jail: 36,
+          fine: 550,
+        },
+        {
+          category: "PC",
+          code: "221",
+          type: "Misdemeanor",
+          desc: "Prostitution",
+          jail: 8,
+          fine: 150,
+        },
+        {
+          category: "PC",
+          code: "222",
+          type: "Misdemeanor",
+          desc: "Solicitation of a Prostitute",
+          jail: 8,
+          fine: 150,
+        },
+        {
+          category: "PC",
+          code: "223",
+          type: "Felony",
+          desc: "Pandering / Pimping",
+          jail: 20,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "224",
+          type: "Felony",
+          desc: "Statutory Rape",
+          jail: 18,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "225",
+          type: "Felony",
+          desc: "Child Abuse",
+          jail: 35,
+          fine: 550,
+        },
+        {
+          category: "PC",
+          code: "226",
+          type: "Felony",
+          desc: "Possession of Child Pornography",
+          jail: 65,
+          fine: 1000,
+        },
+        {
+          category: "PC",
+          code: "227",
+          type: "Felony",
+          desc: "Solicitation of a Minor",
+          jail: 24,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "228",
+          type: "Infraction",
+          desc: "Minor Alcohol Violation",
+          jail: 0,
+          fine: 2500,
+        },
+        {
+          category: "PC",
+          code: "229",
+          type: "Misdemeanor",
+          desc: "Sale of Alcohol to a Minor",
+          jail: 4,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "230(a)",
+          type: "Felony",
+          desc: "Animal Abuse / Cruelty - disengaja",
+          jail: 16,
+          fine: 200,
+        },
+        {
+          category: "PC",
+          code: "230(b)",
+          type: "Felony",
+          desc: "Animal Abuse / Cruelty - karena kelalaian",
+          jail: 12,
+          fine: 150,
+        },
+        {
+          category: "PC",
+          code: "232",
+          type: "Misdemeanor",
+          desc: "Sale of Tobacco to a Minor",
+          jail: 4,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "301",
+          type: "Infraction",
+          desc: "Littering",
+          jail: 0,
+          fine: 300,
+        },
+        {
+          category: "PC",
+          code: "302",
+          type: "Misdemeanor",
+          desc: "Illegally Discharging a Firearm",
+          jail: 4,
+          fine: 100,
+        },
+        {
+          category: "PC",
+          code: "303",
+          type: "Felony",
+          desc: "Shooting At An Inhabited Dwelling Or Occupied Car",
+          jail: 36,
+          fine: 550,
+        },
+        {
+          category: "PC",
+          code: "304",
+          type: "Misdemeanor",
+          desc: "Possession of a Controlled Substance Other than Marijuana",
+          jail: 4,
+          fine: 100,
+        },
+        {
+          category: "PC",
+          code: "305",
+          type: "Felony",
+          desc: "Possession of a Controlled Substance with Intent To Sell",
+          jail: 24,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "306",
+          type: "Misdemeanor",
+          desc: "Possession of Drug Paraphernalia",
+          jail: 4,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "307",
+          type: "Felony",
+          desc: "Maintaining A Place For The Purpose Of Distribution",
+          jail: 28,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "308",
+          type: "Felony",
+          desc: "Manufacture of a Controlled Substance",
+          jail: 48,
+          fine: 550,
+        },
+        {
+          category: "PC",
+          code: "309",
+          type: "Felony",
+          desc: "Sale of a Controlled Substance Other than Marijuana",
+          jail: 36,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "310",
+          type: "Misdemeanor",
+          desc: "Sale of a Controlled Substance (Marijuana / Obat Resep)",
+          jail: 14,
+          fine: 150,
+        },
+        {
+          category: "PC",
+          code: "311",
+          type: "Infraction",
+          desc: "Possession of an Open Container",
+          jail: 0,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "312",
+          type: "Misdemeanor",
+          desc: "Public Intoxication",
+          jail: 4,
+          fine: 40,
+        },
+        {
+          category: "PC",
+          code: "313(a)",
+          type: "Misdemeanor",
+          desc: "Under The Influence of a Controlled Substance",
+          jail: 5,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "313(b)",
+          type: "Misdemeanor",
+          desc: "Under The Influence of Marijuana di tempat umum",
+          jail: 4,
+          fine: 30,
+        },
+        {
+          category: "PC",
+          code: "314(a)",
+          type: "Misdemeanor",
+          desc: "Possession of Marijuana - lebih dari 5 gram",
+          jail: 6,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "314(b)",
+          type: "Misdemeanor",
+          desc: "Possession of Marijuana - di bawah 21 tahun, hingga 5 gram",
+          jail: 4,
+          fine: 40,
+        },
+        {
+          category: "PC",
+          code: "314(c)",
+          type: "Infraction",
+          desc: "Possession of Marijuana - di bawah 18 tahun, hingga 5 gram",
+          jail: 0,
+          fine: 200,
+        },
+        {
+          category: "PC",
+          code: "315",
+          type: "Misdemeanor",
+          desc: "Possession of an Unlicensed Firearm",
+          jail: 40,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "316",
+          type: "Felony",
+          desc: "Possession of a Destructive Device",
+          jail: 30,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "317",
+          type: "Felony",
+          desc: "Manufacture of a Destructive Device or Prohibited Weapon",
+          jail: 32,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "318",
+          type: "Felony",
+          desc: "Illegal Sale, Lease, or Transfer of a Firearm",
+          jail: 60,
+          fine: 800,
+        },
+        {
+          category: "PC",
+          code: "319(a)",
+          type: "Misdemeanor",
+          desc: "Drive-By Shooting - mengizinkan orang lain menembak",
+          jail: 16,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "319(b)",
+          type: "Felony",
+          desc: "Drive-By Shooting - menembak ke arah orang lain",
+          jail: 30,
+          fine: 400,
+        },
+        {
+          category: "PC",
+          code: "320",
+          type: "Misdemeanor",
+          desc: "Weapons License Violation (CCW)",
+          jail: 50,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "321",
+          type: "Misdemeanor",
+          desc: "Failure to Report a Stolen Firearm",
+          jail: 40,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "322",
+          type: "Felony",
+          desc: "Illegal Distribution of Ammunition",
+          jail: 30,
+          fine: 550,
+        },
+        {
+          category: "PC",
+          code: "323",
+          type: "Felony",
+          desc: "Terrorism",
+          jail: 0,
+          fine: 0,
+          life: true,
+        },
+        {
+          category: "PC",
+          code: "324",
+          type: "Felony",
+          desc: "Treason",
+          jail: 0,
+          fine: 0,
+          life: true,
+        },
+        {
+          category: "PC",
+          code: "401(a)",
+          type: "Misdemeanor",
+          desc: "Unlawful Assembly - 2+ orang berkumpul untuk tindak pidana",
+          jail: 4,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "401(b)",
+          type: "Infraction",
+          desc: "Unlawful Assembly - unjuk rasa tanpa izin (dikenakan ke pemimpin)",
+          jail: 0,
+          fine: 900,
+        },
+        {
+          category: "PC",
+          code: "402",
+          type: "Felony",
+          desc: "Incitement to Riot",
+          jail: 20,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "403(a)",
+          type: "Misdemeanor",
+          desc: "Riot - tetap hadir setelah peringatan",
+          jail: 8,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "403(b)",
+          type: "Felony",
+          desc: "Riot - mengambil orang dari penahanan sah",
+          jail: 24,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "404",
+          type: "Felony",
+          desc: "Brandishing a Firearm",
+          jail: 120,
+          fine: 1500,
+        },
+        {
+          category: "PC",
+          code: "405",
+          type: "Misdemeanor",
+          desc: "Brandishing a Deadly Weapon (selain senjata api)",
+          jail: 20,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "406(a)",
+          type: "Misdemeanor",
+          desc: "Unauthorized Entry - area darurat",
+          jail: 10,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "406(b)",
+          type: "Misdemeanor",
+          desc: "Menolak meninggalkan area darurat",
+          jail: 15,
+          fine: 200,
+        },
+        {
+          category: "PC",
+          code: "406(c)",
+          type: "Felony",
+          desc: "Tindakan ilegal di area darurat (pencurian/perampokan)",
+          jail: 20,
+          fine: 300,
+        },
+        {
+          category: "PC",
+          code: "415(a)",
+          type: "Misdemeanor",
+          desc: "Disturbing the Peace - bertarung di tempat publik",
+          jail: 3,
+          fine: 20,
+        },
+        {
+          category: "PC",
+          code: "415(b)",
+          type: "Infraction",
+          desc: "Disturbing the Peace - suara keras tidak wajar",
+          jail: 0,
+          fine: 200,
+        },
+        {
+          category: "PC",
+          code: "415(c)",
+          type: "Infraction",
+          desc: "Disturbing the Peace - kata menyinggung di publik",
+          jail: 0,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "459",
+          type: "Felony",
+          desc: "Burglary",
+          jail: 20,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "501(a)",
+          type: "Misdemeanor",
+          desc: "Embezzlement",
+          jail: 8,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "501(b)",
+          type: "Felony",
+          desc: "Embezzlement oleh pegawai negara",
+          jail: 20,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "502(a)",
+          type: "Felony",
+          desc: "Arson - disengaja",
+          jail: 32,
+          fine: 550,
+        },
+        {
+          category: "PC",
+          code: "502(b)",
+          type: "Misdemeanor",
+          desc: "Arson - kecelakaan / kelalaian",
+          jail: 4,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "503",
+          type: "Misdemeanor",
+          desc: "Possession of Burglary Tools",
+          jail: 8,
+          fine: 20,
+        },
+        {
+          category: "PC",
+          code: "504",
+          type: "Misdemeanor",
+          desc: "Forgery",
+          jail: 6,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "505",
+          type: "Felony",
+          desc: "Forgery of a State Document",
+          jail: 15,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "506",
+          type: "Felony",
+          desc: "Counterfeiting",
+          jail: 12,
+          fine: 124,
+        },
+        {
+          category: "PC",
+          code: "507",
+          type: "Misdemeanor",
+          desc: "Petty Theft (≤ $950)",
+          jail: 8,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "508(a)",
+          type: "Felony",
+          desc: "Grand Theft - barang > $950",
+          jail: 15,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "508(b)",
+          type: "Felony",
+          desc: "Grand Theft - mobil tidak dihuni",
+          jail: 12,
+          fine: 187,
+        },
+        {
+          category: "PC",
+          code: "508(c)",
+          type: "Felony",
+          desc: "Grand Theft - senjata api",
+          jail: 30,
+          fine: 550,
+        },
+        {
+          category: "PC",
+          code: "509(a)",
+          type: "Felony",
+          desc: "Extortion - intimidasi / kekerasan",
+          jail: 22,
+          fine: 356,
+        },
+        {
+          category: "PC",
+          code: "509(b)",
+          type: "Felony",
+          desc: "Extortion - penyalahgunaan kekuasaan / otoritas",
+          jail: 32,
+          fine: 432,
+        },
+        {
+          category: "PC",
+          code: "510",
+          type: "Misdemeanor",
+          desc: "Receiving Stolen Property",
+          jail: 6,
+          fine: 70,
+        },
+        {
+          category: "PC",
+          code: "511(a)",
+          type: "Felony",
+          desc: "Insurance Fraud - penghancuran barang diasuransikan",
+          jail: 14,
+          fine: 434,
+        },
+        {
+          category: "PC",
+          code: "511(b)",
+          type: "Misdemeanor",
+          desc: "Insurance Fraud - klaim palsu kecelakaan",
+          jail: 8,
+          fine: 87,
+        },
+        {
+          category: "PC",
+          code: "512(a)",
+          type: "Misdemeanor",
+          desc: "Trespass - properti orang lain saat ditutup",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "512(b)",
+          type: "Felony",
+          desc: "Trespass - fasilitas / area terlarang pemerintah",
+          jail: 30,
+          fine: 140,
+        },
+        {
+          category: "PC",
+          code: "512(c)",
+          type: "Misdemeanor",
+          desc: "Trespass - tanah dengan tanda dilarang masuk",
+          jail: 6,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "512(d)",
+          type: "Misdemeanor",
+          desc: "Trespass - menolak meninggalkan tempat usaha",
+          jail: 8,
+          fine: 70,
+        },
+        {
+          category: "PC",
+          code: "512(e)",
+          type: "Misdemeanor",
+          desc: "Trespass - melanggar pemberitahuan penegak hukum",
+          jail: 8,
+          fine: 90,
+        },
+        {
+          category: "PC",
+          code: "513",
+          type: "Felony",
+          desc: "Fraud",
+          jail: 18,
+          fine: 560,
+        },
+        {
+          category: "PC",
+          code: "514",
+          type: "Misdemeanor",
+          desc: "Vandalism",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "601",
+          type: "Felony",
+          desc: "Bribery",
+          jail: 25,
+          fine: 240,
+        },
+        {
+          category: "PC",
+          code: "602(a)",
+          type: "Felony",
+          desc: "Jury Tampering - mempengaruhi juri",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "602(b)",
+          type: "Felony",
+          desc: "Jury Tampering - mengancam juri",
+          jail: 18,
+          fine: 280,
+        },
+        {
+          category: "PC",
+          code: "603(a)",
+          type: "Felony",
+          desc: "Intimidating a Witness or Victim - mencegah kesaksian",
+          jail: 20,
+          fine: 250,
+        },
+        {
+          category: "PC",
+          code: "603(b)",
+          type: "Felony",
+          desc: "Intimidating a Witness or Victim - mencegah distribusi pernyataan",
+          jail: 16,
+          fine: 167,
+        },
+        {
+          category: "PC",
+          code: "604",
+          type: "Felony",
+          desc: "Escape",
+          jail: 40,
+          fine: 650,
+        },
+        {
+          category: "PC",
+          code: "605(a)",
+          type: "Felony",
+          desc: "Aiding in the Escape from State Custody - langsung membantu",
+          jail: 30,
+          fine: 550,
+        },
+        {
+          category: "PC",
+          code: "605(b)",
+          type: "Misdemeanor",
+          desc: "Aiding in the Escape - memberi informasi",
+          jail: 8,
+          fine: 40,
+        },
+        {
+          category: "PC",
+          code: "606(a)",
+          type: "Felony",
+          desc: "Perjury - kesaksian / dokumen palsu",
+          jail: 16,
+          fine: 168,
+        },
+        {
+          category: "PC",
+          code: "606(b)",
+          type: "Felony",
+          desc: "Perjury - oleh petugas perdamaian",
+          jail: 28,
+          fine: 272,
+        },
+        {
+          category: "PC",
+          code: "607(a)",
+          type: "Misdemeanor",
+          desc: "Filing a False Report",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "607(b)",
+          type: "Felony",
+          desc: "Filing a False Report - senjata api hilang",
+          jail: 24,
+          fine: 298,
+        },
+        {
+          category: "PC",
+          code: "608",
+          type: "Misdemeanor",
+          desc: "Filing a False Complaint",
+          jail: 8,
+          fine: 50,
+        },
+        {
+          category: "PC",
+          code: "609(a)",
+          type: "Felony",
+          desc: "Corruption of Public Duty - mengungkap info investigasi",
+          jail: 30,
+          fine: 560,
+        },
+        {
+          category: "PC",
+          code: "609(b)",
+          type: "Felony",
+          desc: "Corruption of Public Duty - menolak menangkap tersangka",
+          jail: 24,
+          fine: 450,
+        },
+        {
+          category: "PC",
+          code: "609(c)",
+          type: "Felony",
+          desc: "Corruption of Public Duty - kelalaian kriminal",
+          jail: 24,
+          fine: 460,
+        },
+        {
+          category: "PC",
+          code: "610(a)",
+          type: "Misdemeanor",
+          desc: "Obstruction of Justice - mencegah / menunda petugas",
+          jail: 6,
+          fine: 60,
+        },
+        {
+          category: "PC",
+          code: "610(b)",
+          type: "Misdemeanor",
+          desc: "Obstruction of Justice - gagal mematuhi perintah sah",
+          jail: 4,
+          fine: 40,
+        },
+        {
+          category: "PC",
+          code: "611(a)",
+          type: "Misdemeanor",
+          desc: "Resisting a Peace Officer - menghindari / melawan penangkapan",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "611(b)",
+          type: "Felony",
+          desc: "Resisting a Peace Officer - melarikan diri dari penjagaan",
+          jail: 10,
+          fine: 100,
+        },
+        {
+          category: "PC",
+          code: "612",
+          type: "Misdemeanor",
+          desc: "Failure To Pay A Fine",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "613",
+          type: "Misdemeanor",
+          desc: "Failure to Identify to a Peace Officer",
+          jail: 4,
+          fine: 40,
+        },
+        {
+          category: "PC",
+          code: "614(a)",
+          type: "Misdemeanor",
+          desc: "Impersonation of a State Employee",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "614(b)",
+          type: "Misdemeanor",
+          desc: "Impersonation - mengenakan seragam pegawai negara",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "614(c)",
+          type: "Felony",
+          desc: "Impersonation of a Federal Employee",
+          jail: 20,
+          fine: 520,
+        },
+        {
+          category: "PC",
+          code: "615",
+          type: "Misdemeanor",
+          desc: "Making a False Report of an Emergency",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "616",
+          type: "Felony",
+          desc: "Evidence Tampering",
+          jail: 35,
+          fine: 535,
+        },
+        {
+          category: "PC",
+          code: "617",
+          type: "Felony",
+          desc: "Introduction of Contraband",
+          jail: 36,
+          fine: 850,
+        },
+        {
+          category: "PC",
+          code: "618",
+          type: "Felony",
+          desc: "Violation of Parole",
+          jail: 48,
+          fine: 480,
+        },
+        {
+          category: "PC",
+          code: "619(a)",
+          type: "Felony",
+          desc: "Voter Fraud",
+          jail: 52,
+          fine: 524,
+        },
+        {
+          category: "PC",
+          code: "619(b)",
+          type: "Felony",
+          desc: "Voter Pandering - membeli suara",
+          jail: 60,
+          fine: 650,
+        },
+        {
+          category: "PC",
+          code: "620",
+          type: "Felony",
+          desc: "Corruption of Public Office",
+          jail: 64,
+          fine: 645,
+        },
+        {
+          category: "PC",
+          code: "621",
+          type: "Misdemeanor",
+          desc: "Contempt of Senate",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "622",
+          type: "Misdemeanor",
+          desc: "Contempt of Court",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "623",
+          type: "Misdemeanor",
+          desc: "Subpoena Violation",
+          jail: 8,
+          fine: 80,
+        },
+        {
+          category: "PC",
+          code: "701",
+          type: "Misdemeanor",
+          desc: "Reckless Driving",
+          jail: 20,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "702",
+          type: "Felony",
+          desc: "Felony Reckless Driving (suspend lisensi 24 jam)",
+          jail: 28,
+          fine: 540,
+        },
+        {
+          category: "PC",
+          code: "703(a)",
+          type: "Felony",
+          desc: "DUI - BAC ≥ 0.08% (suspend lisensi 24 jam)",
+          jail: 24,
+          fine: 246,
+        },
+        {
+          category: "PC",
+          code: "703(b)",
+          type: "Felony",
+          desc: "DUI - pegawai negara saat bertugas (suspend lisensi 24 jam)",
+          jail: 30,
+          fine: 350,
+        },
+        {
+          category: "PC",
+          code: "703(c)",
+          type: "Felony",
+          desc: "DUI - kendaraan komersial BAC ≥ 0.04% (suspend lisensi 24 jam)",
+          jail: 24,
+          fine: 542,
+        },
+        {
+          category: "PC",
+          code: "703(d)",
+          type: "Misdemeanor",
+          desc: "DUI - terganggu alkohol / narkoba (suspend lisensi 24 jam)",
+          jail: 16,
+          fine: 165,
+        },
+        {
+          category: "PC",
+          code: "704",
+          type: "Misdemeanor",
+          desc: "Evading a Peace Officer (suspend lisensi 48 jam)",
+          jail: 16,
+          fine: 156,
+        },
+        {
+          category: "PC",
+          code: "705",
+          type: "Felony",
+          desc: "Reckless Evading of a Peace Officer (suspend lisensi 60 jam)",
+          jail: 36,
+          fine: 365,
+        },
+        {
+          category: "PC",
+          code: "706(a)",
+          type: "Felony",
+          desc: "Hit and Run - cedera / kematian (suspend lisensi 24 jam)",
+          jail: 35,
+          fine: 464,
+        },
+        {
+          category: "PC",
+          code: "706(b)",
+          type: "Misdemeanor",
+          desc: "Hit and Run - hanya kerusakan properti (suspend lisensi 24 jam)",
+          jail: 10,
+          fine: 154,
+        },
+        {
+          category: "PC",
+          code: "801",
+          type: "Misdemeanor",
+          desc: "Brandishing a Firearm - mengancam nyawa",
+          jail: 20,
+          fine: 1000,
+        },
+        {
+          category: "PC",
+          code: "802",
+          type: "Misdemeanor",
+          desc: "Discharging a Firearm in Public",
+          jail: 20,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "802(b)",
+          type: "Felony",
+          desc: "Discharging a Firearm in Public - menyebabkan cedera (eskalasi)",
+          jail: 40,
+          fine: 1500,
+        },
+        {
+          category: "PC",
+          code: "803",
+          type: "Misdemeanor",
+          desc: "Unlicensed Possession of a Deadly Weapon",
+          jail: 20,
+          fine: 760,
+        },
+        {
+          category: "PC",
+          code: "804(a)",
+          type: "Misdemeanor",
+          desc: "Possession of an Unlicensed Firearm - tidak terdaftar",
+          jail: 25,
+          fine: 850,
+        },
+        {
+          category: "PC",
+          code: "804(b)",
+          type: "Felony",
+          desc: "Possession of a Firearm - hasil curian",
+          jail: 30,
+          fine: 900,
+        },
+        {
+          category: "PC",
+          code: "804(c)",
+          type: "Misdemeanor",
+          desc: "Possession of a Replica Firearm - dengan niat mengancam",
+          jail: 20,
+          fine: 500,
+        },
+        {
+          category: "PC",
+          code: "805",
+          type: "Felony",
+          desc: "Possession of an Illegal Firearm",
+          jail: 40,
+          fine: 600,
+        },
+        {
+          category: "PC",
+          code: "806",
+          type: "Felony",
+          desc: "Firearm Theft",
+          jail: 50,
+          fine: 930,
+        },
+        {
+          category: "PC",
+          code: "807",
+          type: "Felony",
+          desc: "Illegal Firearm Distribution",
+          jail: 30,
+          fine: 910,
+        },
+        {
+          category: "PC",
+          code: "808",
+          type: "Felony",
+          desc: "Illegal Modification of a Firearm",
+          jail: 90,
+          fine: 2500,
+        },
+        {
+          category: "PC",
+          code: "809",
+          type: "Misdemeanor",
+          desc: "Negligent Storage of a Firearm",
+          jail: 30,
+          fine: 750,
+        },
+      ];
+
+      // ==================== DEFAULT VEHICLE CODE ====================
+      const DEFAULT_VCS = [
+        {
+          category: "VC",
+          code: "101-MC",
+          type: "Infraction",
+          desc: "Vehicle Registration Violation - Motorcycle (pilih level)",
+          jail: 0,
+          fine: 325,
+          vary: { base: 325 },
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "101-Car",
+          type: "Infraction",
+          desc: "Vehicle Registration Violation - Car (pilih level)",
+          jail: 0,
+          fine: 650,
+          vary: { base: 650 },
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "101-Com",
+          type: "Infraction",
+          desc: "Vehicle Registration Violation - Commercial (pilih level)",
+          jail: 0,
+          fine: 488,
+          vary: { base: 488 },
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "101-Sport",
+          type: "Infraction",
+          desc: "Vehicle Registration Violation - Sport (pilih level)",
+          jail: 0,
+          fine: 813,
+          vary: { base: 813 },
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "201(a)",
+          type: "Misdemeanor",
+          desc: "Driving without a Valid License",
+          jail: 4,
+          fine: 0,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "201(b)",
+          type: "Misdemeanor",
+          desc: "Driving without physical license",
+          jail: 5,
+          fine: 450,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "201(c)",
+          type: "Infraction",
+          desc: "Driving with expired license",
+          jail: 0,
+          fine: 500,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "202",
+          type: "Misdemeanor",
+          desc: "Driving on a Suspended License",
+          jail: 4,
+          fine: 550,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "203(a)",
+          type: "Infraction",
+          desc: "Learner's Permit - tanpa izin belajar",
+          jail: 0,
+          fine: 200,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "203(b)",
+          type: "Infraction",
+          desc: "Learner's Permit - tanpa pendamping dewasa",
+          jail: 0,
+          fine: 300,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "301",
+          type: "Infraction",
+          desc: "Driving without Insurance",
+          jail: 0,
+          fine: 200,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "401(a)",
+          type: "Infraction",
+          desc: "Speeding 40+ MPH (bisnis/pemukiman)",
+          jail: 0,
+          fine: 200,
+          points: 1,
+        },
+        {
+          category: "VC",
+          code: "401(b)",
+          type: "Infraction",
+          desc: "Speeding 65+ MPH (non-bisnis)",
+          jail: 0,
+          fine: 500,
+          points: 1,
+        },
+        {
+          category: "VC",
+          code: "401(c)",
+          type: "Infraction",
+          desc: "Speeding 90+ MPH di jalan raya",
+          jail: 0,
+          fine: 750,
+          points: 2,
+        },
+        {
+          category: "VC",
+          code: "401(d)",
+          type: "Infraction",
+          desc: "Kecepatan tidak wajar",
+          jail: 0,
+          fine: 200,
+          points: 2,
+        },
+        {
+          category: "VC",
+          code: "402",
+          type: "Infraction",
+          desc: "Failure to Yield",
+          jail: 0,
+          fine: 350,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "403",
+          type: "Infraction",
+          desc: "Failure to Yield to Emergency Vehicles",
+          jail: 0,
+          fine: 400,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "404",
+          type: "Infraction",
+          desc: "Failure to Abide by a Traffic Control Device",
+          jail: 0,
+          fine: 200,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "405",
+          type: "Infraction",
+          desc: "Illegal Parking (+ penyitaan kendaraan)",
+          jail: 0,
+          fine: 950,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "406",
+          type: "Infraction",
+          desc: "Vehicular Noise Violation",
+          jail: 0,
+          fine: 500,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "407",
+          type: "Infraction",
+          desc: "Illegal Use of Hydraulics",
+          jail: 0,
+          fine: 450,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "408",
+          type: "Infraction",
+          desc: "Unsafe Usage of a Bicycle",
+          jail: 0,
+          fine: 500,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "409",
+          type: "Infraction",
+          desc: "Jaywalking",
+          jail: 0,
+          fine: 250,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "410",
+          type: "Infraction",
+          desc: "Speed Contests",
+          jail: 0,
+          fine: 500,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "411",
+          type: "Infraction",
+          desc: "Unlawful Operation of Truck on Non-Designated Routes (+ impound)",
+          jail: 0,
+          fine: 1500,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "412",
+          type: "Misdemeanor",
+          desc: "Operating Commercial Vehicle Without Proper License (+$500 jika bahaya)",
+          jail: 0,
+          fine: 870,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "501",
+          type: "Infraction",
+          desc: "Tinted Windows",
+          jail: 0,
+          fine: 195,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "502",
+          type: "Infraction",
+          desc: "Driving Without Headlights",
+          jail: 0,
+          fine: 230,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "503",
+          type: "Infraction",
+          desc: "Operating an Unsafe Vehicle",
+          jail: 0,
+          fine: 640,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "504",
+          type: "Misdemeanor",
+          desc: "Unauthorized Use of Red/Blue Lights (+ impound)",
+          jail: 10,
+          fine: 350,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "601",
+          type: "Infraction",
+          desc: "Failure to Wear a Helmet",
+          jail: 0,
+          fine: 500,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "602",
+          type: "Infraction",
+          desc: "Unlawful Riding and Towing",
+          jail: 0,
+          fine: 400,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "603",
+          type: "Infraction",
+          desc: "Reckless Operation of Machinery",
+          jail: 0,
+          fine: 250,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "604",
+          type: "Infraction",
+          desc: "Reckless Operation of Off-Road Vehicle",
+          jail: 0,
+          fine: 4100,
+          points: 0,
+        },
+        {
+          category: "VC",
+          code: "605",
+          type: "Infraction",
+          desc: "Unlawful Riding in a Vehicle",
+          jail: 0,
+          fine: 250,
+          points: 0,
+        },
+      ];
+
+      const ALL_DEFAULT = [...DEFAULT_PCS, ...DEFAULT_VCS];
+
+      // ==================== PENJELASAN LENGKAP ====================
+      const EXPLANATIONS = {
+        "PC-101": `Seseorang yang <b>mengkomunikasikan</b> kepada orang lain bahwa mereka akan <b>melukai secara fisik</b> atau <b>membunuh</b> orang tersebut, sehingga menempatkan orang itu dalam keadaan <b>takut</b> yang wajar terhadap <b>keamanannya sendiri</b> — baik secara langsung, tertulis, atau melalui media.<br><br><b>(a)</b> Terhadap orang itu sendiri.<br><b>(b)</b> Terhadap teman dekat atau <b>kerabat</b> orang lain.`,
+        "PC-102": `Seseorang yang <b>secara ilegal</b> mencoba dan memiliki kemampuan untuk <b>melakukan cedera</b> yang <b>kekerasan</b> pada orang lain.`,
+        "PC-103": `Seseorang yang <b>secara ilegal</b> mencoba dan memiliki kemampuan untuk <b>melakukan cedera</b> yang <b>kekerasan</b> pada seorang <b>petugas keamanan</b> yang sedang menjalankan tugasnya.`,
+        "PC-104": `Seseorang yang <b>secara ilegal</b> mencoba dan memiliki kemampuan untuk <b>melakukan cedera</b> yang <b>kekerasan</b> pada seorang <b>pegawai negeri</b> yang sedang menjalankan tugasnya.`,
+        "PC-105": `Seseorang yang mencoba menyebabkan atau mengancam <b>bahaya segera</b> kepada orang lain dengan menggunakan <b>senjata</b>, <b>alat</b>, atau <b>barang berbahaya</b> lainnya untuk menyampaikan ancaman tersebut.`,
+        "PC-106": `Seseorang yang mencoba menyebabkan atau mengancam <b>bahaya segera</b> kepada seorang <b>petugas keamanan</b> yang sedang menjalankan tugasnya, sambil menggunakan <b>senjata</b>, <b>alat</b>, atau <b>barang berbahaya</b> lainnya.`,
+        "PC-107": `Seseorang yang menggunakan <b>kekuatan</b> atau <b>kekerasan</b> yang <b>sengaja</b> dan <b>tidak sah</b> untuk menyebabkan <b>kerugian fisik</b> kepada orang lain.`,
+        "PC-108": `Seseorang yang menggunakan <b>kekuatan</b> atau <b>kekerasan</b> yang <b>sengaja</b> dan <b>tidak sah</b> untuk menyebabkan <b>kerugian fisik</b> kepada seorang <b>petugas keamanan</b> yang sedang menjalankan tugasnya.`,
+        "PC-109": `Seseorang yang menggunakan <b>kekuatan</b> atau <b>kekerasan</b> yang <b>sengaja</b> dan <b>tidak sah</b> untuk menyebabkan <b>kerugian fisik</b> kepada seorang <b>pegawai negeri</b> yang sedang menjalankan tugasnya.`,
+        "PC-110(a)": `Seseorang yang menggunakan <b>kekuatan</b> atau <b>kekerasan</b> yang <b>besar</b> atau <b>berkelanjutan</b> terhadap orang lain dan menyebabkan <b>kerugian berat</b>.`,
+        "PC-110(b)": `Seseorang yang menggunakan <b>senjata</b>, <b>alat</b>, atau <b>barang berbahaya</b> lainnya untuk menyebabkan <b>kerugian berat</b> kepada orang lain.`,
+        "PC-111": `Seseorang yang secara <b>tidak sah</b> membunuh manusia lain tanpa <b>niat jahat</b>.<br><br><b>(a) Sukarela:</b> akibat pertengkaran mendadak atau emosi memuncak.<br><b>(b) Tidak sukarela:</b> dalam pelaksanaan tindakan tidak sah yang tidak mencapai felony.<br><b>(c) Kendaraan:</b> mengemudi berbahaya dan ceroboh menyebabkan kematian.<br><b>(d)</b> Menghindari polisi dengan kendaraan menyebabkan kematian orang lain.`,
+        "PC-112(a)": `Seseorang yang <b>menahan</b> atau <b>menangkap</b> orang lain tanpa persetujuan mereka (atau wali) tanpa <b>niat direncanakan</b> atau <b>tebusan</b>. Tidak berlaku untuk penegak hukum sah.`,
+        "PC-112(b)": `Seseorang yang melakukan <b>penangkapan warga</b> yang <b>tidak sah</b>.`,
+        "PC-113(a)": `Seseorang yang <b>mencuri</b>, <b>mengambil</b>, <b>menahan</b>, atau <b>menangkap</b> orang lain dengan <b>kekuatan</b> atau menimbulkan <b>ketakutan</b>, tanpa persetujuan, dengan <b>niat direncanakan</b>.`,
+        "PC-113(b)": `Seseorang yang <b>merebut</b>, <b>mengurung</b>, <b>menipu</b>, <b>menculik</b>, atau <b>menyembunyikan</b> orang lain untuk <b>tebusan</b>, <b>imbalan</b>, atau <b>pemerasan</b>.`,
+        "PC-114": `Seseorang yang <b>menyebabkan rasa sakit</b> dan <b>penderitaan</b> dengan tujuan <b>balas dendam</b>, <b>pemerasan</b>, <b>persuasi</b>, atau tujuan <b>sadis</b>; ATAU dengan sengaja <b>merusak</b>, <b>melumpuhkan</b>, atau <b>menghancurkan</b> bagian tubuh seseorang.`,
+        "PC-115(a)": `Seseorang yang dengan sengaja dan <b>berniat jahat</b> mengikuti atau <b>mengganggu</b> orang lain yang telah menyatakan tidak <b>setuju</b>.`,
+        "PC-115(b)": `Seseorang yang melanggar <b>perintah penahanan resmi</b> yang dikeluarkan pengadilan.`,
+        "PC-116(a)": `Seseorang yang dengan sengaja membatasi <b>kebebasan</b> orang lain dengan <b>niat</b> untuk memaksa kerja, perdagangan seks, atau kegiatan <b>paksa</b> lainnya.`,
+        "PC-116(b)": `Seseorang yang dengan sengaja <b>menyelundupkan</b> orang asing ke dalam negara bagian tanpa <b>visa</b> dan <b>otorisasi</b> yang tepat.`,
+        "PC-185": `Seseorang yang mengenakan <b>topeng</b>, <b>jenggot palsu</b>, atau <b>penyamaran</b> (lengkap atau sebagian) untuk menghindari identifikasi dalam melakukan <b>pelanggaran publik</b>.`,
+        "PC-187(a)": `<b>First Degree Murder.</b> Seseorang yang secara <b>ilegal</b> membunuh orang lain dengan <b>alat penghancur</b>, <b>bahan peledak</b>, <b>racun</b>, menunggu <b>kesempatan</b>, <b>siksaan</b>, atau cara yang <b>disengaja</b>, <b>deliberate</b>, dan <b>premeditated</b>.`,
+        "PC-187(b)": `<b>Second Degree Murder.</b> Seseorang yang secara <b>ilegal</b> membunuh manusia lain tanpa <b>perencanaan</b> dan <b>deliberasi</b>, tetapi dengan <b>niat jahat</b> sebelumnya.`,
+        "PC-187(c)": `<b>Felony Murder.</b> Terjadi ketika seseorang melakukan <b>pembunuhan</b> saat terlibat dalam tindakan <b>felony</b> yang terbukti <b>premeditated</b>.`,
+        "PC-188(a)": `Seseorang yang dengan <b>sengaja</b> dan <b>tegas</b> mencoba <b>membunuh</b> atau menyebabkan <b>bahaya mengancam jiwa</b> melalui tindakan <b>premeditasi</b>.`,
+        "PC-188(b)": `Seseorang yang akibat <b>kecelakaan kriminal</b>, <b>kelalaian</b>, atau <b>emosi tinggi</b>, menyebabkan <b>kerusakan fisik parah</b> atau mengancam jiwa.`,
+        "PC-211": `Seseorang yang mengambil <b>harta</b> dari kepemilikan orang lain <b>tanpa izin</b>, dengan menggunakan <b>kekuatan</b> atau <b>rasa takut</b>.`,
+        "PC-215": `Seseorang yang mengambil <b>kendaraan bermotor</b> milik orang lain dari <b>tangan</b>/<b>kehadiran</b> orang tersebut, dengan <b>kekuatan</b> atau <b>rasa takut</b>.`,
+        "PC-216": `Seseorang yang memaksa orang lain untuk <b>hubungan seksual</b>; ATAU melakukan hubungan seksual tanpa <b>persetujuan</b>; ATAU dengan orang yang <b>tidak mampu</b>, <b>cacat</b>, atau tidak dapat memberikan persetujuan.`,
+        "PC-217": `Seseorang yang meminta atau terlibat dalam <b>perilaku seksual tidak pantas</b> atau <b>sugestif</b> di tempat umum atau terlihat publik.`,
+        "PC-218(a)": `Seseorang yang dengan sengaja <b>memperlihatkan tubuh telanjang</b> atau <b>genitalia</b> di <b>tanah publik</b> atau area publik bisnis pribadi.`,
+        "PC-218(b)": `Seseorang yang dengan sengaja <b>memperlihatkan tubuh telanjang</b> atau <b>genitalia</b> di <b>tanah pribadi</b> tanpa izin pemilik.`,
+        "PC-218(c)": `Seseorang yang terlibat dalam <b>seks</b> atau aktivitas seksual di depan <b>anak di bawah umur</b>.`,
+        "PC-219": `Seseorang yang melakukan <b>penghinaan verbal</b> untuk tujuan <b>penggairahan seksual</b>, <b>gratifikasi</b>, atau <b>penyalahgunaan</b>; ATAU mengancam <b>bahaya segera</b> atau <b>kontak seksual tidak disetujui</b>.`,
+        "PC-220(a)": `Seseorang yang melakukan <b>sentuhan tidak diinginkan</b> atau <b>kontak seksual</b>.`,
+        "PC-220(b)": `Seseorang yang menyebabkan <b>serangan</b> atau <b>kontak fisik agresif</b> untuk tujuan <b>penggairahan seksual</b>, <b>gratifikasi</b>, atau <b>penyalahgunaan</b>.`,
+        "PC-221": `Seseorang yang dengan <b>sadar</b> terlibat dalam <b>tindakan seksual</b> sebagai imbalan <b>pembayaran</b>, <b>barang</b>, <b>layanan</b>, atau barang bernilai lainnya.`,
+        "PC-222": `Seseorang yang menawarkan <b>pembayaran</b>, <b>barang</b>, <b>layanan</b>, atau barang bernilai kepada seseorang sebagai imbalan <b>tindakan seksual</b>.`,
+        "PC-223": `Seseorang yang <b>mengajak</b>, <b>mengiklankan</b>, <b>membantu</b>, <b>menyediakan transportasi</b>, atau <b>mengawasi</b> orang yang terlibat <b>prostitusi</b> dan mempertahankan sebagian/seluruh uang hasilnya.`,
+        "PC-224": `Seseorang yang terlibat dalam <b>hubungan seksual</b> dengan orang berusia di bawah <b>18 tahun</b> yang tidak dapat memberikan <b>persetujuan hukum</b>.`,
+        "PC-225": `Seseorang yang dengan sengaja menyebabkan <b>siksaan kejam</b>, berlebihan, atau tidak manusiawi; ATAU <b>cedera</b> pada anak di bawah <b>18 tahun</b> yang mengakibatkan <b>kerugian traumatis</b>; ATAU cedera traumatis akibat <b>kelalaian</b>.`,
+        "PC-226": `Setiap orang yang dengan sengaja memiliki <b>gambar</b>, <b>film</b>, <b>video</b>, atau perangkat berisi konten <b>anak di bawah 18 tahun</b> terlibat/meniru <b>perilaku seksual</b>.`,
+        "PC-227": `Berkomunikasi dengan <b>anak di bawah umur</b> dan meminta bertemu untuk <b>tindakan seksual</b>; ATAU menghadiri pertemuan yang diatur; ATAU mengirim <b>materi eksplisit</b> untuk menggoda anak.`,
+        "PC-228": `<b>Anak di bawah 21 tahun</b> yang memiliki <b>alkohol</b> untuk dikonsumsi, produk mengandung alkohol, atau terlihat di bawah pengaruh alkohol.`,
+        "PC-229": `Seseorang yang dengan sengaja dan mengetahui <b>menjual alkohol</b> kepada <b>anak di bawah 21 tahun</b>.`,
+        "PC-230(a)": `Seseorang yang dengan sengaja <b>melukai</b>, <b>mencabik</b>, <b>menyiksa</b>, atau <b>membunuh</b> <b>hewan hidup</b>.`,
+        "PC-230(b)": `Seseorang yang karena <b>kelalaian</b> melukai, mencabik, menyiksa, atau membunuh <b>hewan hidup</b>.`,
+        "PC-232": `Seseorang yang dengan sengaja menjual <b>tobacco</b> kepada <b>minor</b> di bawah <b>21 tahun</b>.`,
+        "PC-301": `Tindakan <b>disengaja</b> atau <b>kelalaian</b> membuang <b>sampah</b> (rokok, cerutu, korek api, wadah, kemasan) yang dapat melukai atau menciptakan bahaya lalu lintas.`,
+        "PC-302": `Seseorang yang dengan <b>sengaja</b> melepaskan tembakan dengan cara <b>sangat ceroboh</b> yang dapat mengakibatkan <b>cedera</b> atau <b>kematian</b>.`,
+        "PC-303": `Seseorang yang dengan <b>niat jahat</b> dan <b>sengaja</b> melepaskan tembakan ke arah <b>rumah dihuni</b>, <b>gedung ditempati</b>, <b>kendaraan bermotor dihuni</b>, <b>pesawat</b>, atau <b>trailer</b>.`,
+        "PC-304": `Setiap orang yang memiliki <b>zat terkontrol</b> (selain ganja) yang tidak diberikan secara sah oleh praktisi medis berlisensi.`,
+        "PC-305": `Setiap orang yang memiliki <b>zat terkontrol</b> (selain ganja) dalam jumlah lebih dari <b>10 gram</b> dengan niat untuk dijual.`,
+        "PC-306": `Setiap orang yang dengan sengaja memiliki alat yang digunakan secara eksklusif untuk memproses/mengonsumsi <b>zat terkontrol ilegal</b>.`,
+        "PC-307": `Membuka atau memelihara properti untuk secara ilegal menjual, memberikan, menyimpan, atau menggunakan <b>zat terkontrol</b>, <b>senjata api</b>, atau barang ilegal lainnya.`,
+        "PC-308": `Memproduksi, meramu, mengubah, menghasilkan, atau menyiapkan <b>zat ilegal</b> secara langsung maupun tidak langsung.`,
+        "PC-309": `Menjual atau memiliki niat untuk menjual <b>zat terkontrol</b> kepada orang lain (selain ganja).`,
+        "PC-310": `Menjual atau memiliki niat untuk menjual <b>ganja</b> atau <b>obat resep</b> kepada orang lain.`,
+        "PC-311": `Seseorang yang memiliki wadah alkohol yang <b>terlihat dan terbuka</b> di tempat umum atau di dalam kendaraan bermotor.`,
+        "PC-312": `Seseorang yang ditemukan di tempat umum di bawah pengaruh <b>minuman beralkohol</b> yang memabukkan.`,
+        "PC-313(a)": `Seseorang yang menggunakan atau berada di bawah pengaruh <b>zat terlarang</b> tanpa izin atau resep yang sah.`,
+        "PC-313(b)": `Seseorang yang menggunakan atau berada di bawah pengaruh <b>ganja</b> di tempat umum, atau saat melakukan kejahatan lainnya.`,
+        "PC-314(a)": `Memiliki <b>marijuana</b> lebih dari <b>5 gram</b>.`,
+        "PC-314(b)": `Berusia di bawah <b>21 tahun</b> memiliki marijuana hingga <b>5 gram</b>.`,
+        "PC-314(c)": `Berusia di bawah <b>18 tahun</b> memiliki marijuana hingga <b>5 gram</b>.`,
+        "PC-315": `Seseorang yang membawa <b>senjata legal</b> tetapi <b>tanpa lisensi</b> di tubuh, kendaraan, tempat usaha, atau fasilitas lain tanpa izin yang sesuai.`,
+        "PC-316": `Seseorang yang memiliki <b>alat</b> atau <b>perangkat</b> yang dibuat dari <b>bahan peledak</b> dan/atau <b>cairan sangat mudah terbakar</b>, <b>gas</b>, atau <b>bahan padat</b>.`,
+        "PC-317": `Seseorang yang <b>memproduksi</b>, <b>merakit</b>, <b>membongkar</b>, atau memiliki bagian dari <b>senjata berbahaya</b>, <b>peledak</b>, <b>perangkap</b>, <b>senjata api</b>, <b>pisau</b>, atau <b>alat perusak</b>.`,
+        "PC-318": `Seseorang yang <b>menjual</b>, <b>menyewakan</b>, atau <b>mentransfer</b> <b>senjata api</b> kepada orang lain tanpa <b>Federal Firearms License</b>. Transfer orang tua–anak atau nenek–cucu dikecualikan.`,
+        "PC-319(a)": `<b>Pengemudi atau pemilik kendaraan</b> yang dengan sengaja mengizinkan orang lain untuk <b>menembakkan senjata api</b> dari kendaraan tersebut.`,
+        "PC-319(b)": `Seseorang yang <b>menembakkan senjata api</b> dari kendaraan bermotor ke arah orang lain.`,
+        "PC-320": `Seseorang yang membawa <b>senjata api tersembunyi</b> dengan CCW license namun: masuk area terlarang, menolak menunjukkan CCW, tidak memberi tahu petugas, menolak menyerahkan senjata, mengonsumsi alkohol saat membawa, atau melanggar regulasi lainnya.`,
+        "PC-321": `Seseorang yang gagal <b>melaporkan senjata api hilang</b> dalam <b>48 jam</b> setelah mengetahui atau memiliki alasan masuk akal bahwa senjata tersebut hilang.`,
+        "PC-322": `Seseorang yang <b>menjual</b> atau <b>mendistribusikan amunisi</b> dengan cara lain.`,
+        "PC-323": `Seseorang yang menggunakan <b>ancaman</b> atau <b>tindakan sistematis</b> terhadap <b>kepentingan umum</b> untuk menimbulkan <b>ketakutan</b> dan <b>intimidasi</b> dalam skala besar. <b>Hukuman: Seumur Hidup.</b>`,
+        "PC-324": `Seseorang yang <b>melakukan perang</b> terhadap negara bagian San Andreas, berpegang pada <b>musuh</b>, atau memberikan <b>bantuan</b> dan <b>kenyamanan</b> kepada mereka. <b>Hukuman: Seumur Hidup.</b>`,
+        "PC-401(a)": `<b>Dua</b> atau <b>lebih orang</b> yang berkumpul untuk melakukan <b>tindak pidana</b> atau tindak hukum dengan cara <b>kekerasan</b> atau <b>anarkis</b>.`,
+        "PC-401(b)": `Sebuah <b>kelompok</b> yang gagal <b>berunjuk rasa</b> atau <b>demonstrasi</b> dengan <b>damai</b> tanpa <b>izin</b> yang tepat — dikenakan kepada <b>pemimpin</b> atau <b>pengorganisir</b>.`,
+        "PC-402": `Seseorang yang tindakannya dengan sengaja <b>menggugah</b> atau berniat menggugah kerumunan/kelompok besar untuk mendorong <b>tindakan kekerasan</b> atau <b>kerusuhan sipil</b>.`,
+        "PC-403(a)": `Seseorang yang tetap <b>hadir</b> di tempat <b>kerusuhan</b> atau <b>pertemuan tidak sah</b> setelah diberi <b>peringatan hukum</b> untuk beranjak.`,
+        "PC-403(b)": `Seseorang yang berpartisipasi dalam <b>pengambilan</b> orang lain dari <b>penahanan sah</b> oleh petugas keamanan dengan menggunakan <b>kerusuhan</b>.`,
+        "PC-404": `Seseorang yang (kecuali bela diri) <b>mengeluarkan</b> atau <b>memperlihatkan senjata api</b> dengan cara <b>marah</b> atau <b>mengancam</b>.`,
+        "PC-405": `Seseorang yang (kecuali bela diri) <b>mengeluarkan</b> atau <b>memperlihatkan senjata mematikan</b> selain senjata api dengan cara <b>marah</b> atau <b>mengancam</b>.`,
+        "PC-406(a)": `Memasuki <b>area darurat</b>, zona berbahaya, atau area yang telah dievakuasi karena darurat — mengetahui tidak berwenang dan area telah ditutup untuk umum.`,
+        "PC-406(b)": `Menolak <b>meninggalkan area darurat</b> saat diminta petugas, atau <b>masuk kembali</b> setelah dikeluarkan.`,
+        "PC-406(c)": `Saat berada di <b>area darurat</b>, melakukan tindakan yang dilarang seperti <b>pencurian</b> atau <b>perampokan</b> barang.`,
+        "PC-415(a)": `Seseorang yang <b>bertarung secara ilegal</b> di tempat publik atau <b>menantang</b> orang lain untuk bertarung di depan umum.`,
+        "PC-415(b)": `Seseorang yang <b>mengganggu</b> orang lain dengan <b>suara keras</b> dan <b>tidak wajar</b>.`,
+        "PC-415(c)": `Seseorang yang menggunakan <b>kata-kata menyinggung</b> di tempat publik yang cenderung memprovokasi reaksi <b>kekerasan segera</b>.`,
+        "PC-459": `Seseorang yang <b>memasuki</b> rumah, kamar, apartemen, toko, bangunan, atau <b>kendaraan bermotor</b> dengan <b>niat</b> melakukan <b>pencurian kecil/besar</b> atau felony lainnya.`,
+        "PC-501(a)": `Seseorang yang <b>secara curang</b> mengambil <b>barang</b> yang telah dipercayakan kepada mereka oleh orang lain.`,
+        "PC-501(b)": `Pegawai negara yang <b>secara curang</b> memperoleh atau menggunakan barang yang berada dalam kepemilikan berdasarkan <b>kepercayaan</b>.`,
+        "PC-502(a)": `Seseorang yang dengan <b>sengaja</b> dan <b>jahat</b> <b>membakar</b> struktur, tanah hutan, atau barang tanpa izin.`,
+        "PC-502(b)": `Seseorang yang melalui <b>kecelakaan kriminal</b> atau <b>kelalaian</b> menyebabkan <b>kebakaran</b> pada struktur, tanah hutan, atau barang.`,
+        "PC-503": `Seseorang yang memiliki <b>kombinasi alat</b> yang tepat dan <b>niat</b> untuk melakukan <b>pencurian</b> (batang tensa, obeng, shimmy, dll).`,
+        "PC-504": `Seseorang yang dengan <b>niat menipu</b> atau membohongi orang lain, <b>menandatangani</b> nama orang lain atau nama <b>fiktif</b>.`,
+        "PC-505": `Seseorang yang dengan <b>niat menipu</b> mengubah, membuat, memiliki, atau mendistribusikan <b>surat izin mengemudi palsu</b>, <b>SIM pilot</b>, <b>KTP</b>, atau <b>izin senjata palsu</b> dari agen pemerintah.`,
+        "PC-506": `Seseorang yang membuat atau sengaja memiliki <b>alat</b> (dadu, pelat, kertas, logam, mesin) untuk memproduksi <b>uang palsu</b>, <b>tagihan</b>, <b>koin</b>; atau sengaja memiliki uang palsu.`,
+        "PC-507": `Seseorang yang <b>mencuri</b> atau <b>mengambil</b> barang pribadi/perusahaan dengan nilai tidak melebihi <b>$950</b>.`,
+        "PC-508(a)": `Seseorang yang <b>mencuri</b> barang pribadi/perusahaan dengan nilai melebihi <b>$950</b>.`,
+        "PC-508(b)": `Seseorang yang <b>mencuri mobil</b> yang <b>tidak dihuni</b>.`,
+        "PC-508(c)": `Seseorang yang <b>mencuri senjata api</b>.`,
+        "PC-509(a)": `Seseorang yang menggunakan <b>intimidasi</b> atau <b>kekerasan</b> untuk mendapatkan barang atau layanan dari orang lain dengan persetujuannya.`,
+        "PC-509(b)": `Seseorang yang menggunakan atau mengancam dengan <b>kekuasaannya</b> atau <b>otoritasnya</b> dengan <b>niat jahat</b> untuk memaksa tindakan dari orang lain.`,
+        "PC-510": `Seseorang yang dengan sengaja <b>membeli</b> atau <b>menerima barang</b> yang telah dicuri atau diperoleh melalui pencurian/pemerasan.`,
+        "PC-511(a)": `Seseorang yang <b>menghancurkan</b> atau <b>membuang</b> barang yang sedang diasuransikan terhadap kehilangan/kerusakan akibat pencurian, penggelapan, banjir, atau kebakaran dengan <b>niat menipu</b> perusahaan asuransi.`,
+        "PC-511(b)": `Seseorang yang dengan sengaja menyebabkan/berpartisipasi dalam <b>tabrakan kendaraan</b> dengan niat mengajukan <b>klaim palsu</b> atau penipuan.`,
+        "PC-512(a)": `Seseorang yang memasuki properti orang lain saat <b>ditutup</b> atau tidak beroperasi tanpa izin tertulis/terungkap.`,
+        "PC-512(b)": `Seseorang yang tanpa otorisasi memasuki <b>fasilitas pemerintah</b> atau bagian terlarang yang diamankan karena alasan <b>keamanan</b> atau <b>bahaya keselamatan</b>.`,
+        "PC-512(c)": `Seseorang yang memasuki tanah dengan <b>tanda</b> yang menunjukkan bahwa <b>masuk dilarang</b>.`,
+        "PC-512(d)": `Seseorang yang <b>menolak meninggalkan</b> tempat usaha saat diminta oleh pemilik atau orang berwenang.`,
+        "PC-512(e)": `Seseorang yang setelah menerima <b>pemberitahuan</b> dari penegak hukum atau pemilik properti bahwa mereka tidak diizinkan berada di properti tertentu, dengan sengaja melanggar peringatan itu.`,
+        "PC-513": `Seseorang yang dengan sengaja melalui <b>pernyataan palsu</b> atau <b>penipuan</b> menipu orang lain atas uang, tenaga, barang, atau layanan.`,
+        "PC-514": `Seseorang yang <b>merusak</b>, <b>merusakkan</b>, atau <b>menghancurkan</b> properti milik orang lain.`,
+        "PC-601": `Seseorang yang menawarkan atau memberikan <b>hadiah uang</b>, <b>gratifikasi</b>, atau <b>imbalan</b> kepada <b>pejabat publik</b>, <b>pegawai negeri</b>, atau <b>petugas perdamaian</b> untuk mempengaruhi tugas/tindakan mereka.`,
+        "PC-602(a)": `Seseorang yang berusaha mempengaruhi <b>juri</b> menggunakan komunikasi lisan/tertulis di luar proses hukum dengan <b>ancaman</b>, <b>intimidasi</b>, <b>bujukan</b>, atau janji.`,
+        "PC-602(b)": `Seseorang yang <b>mengancam juri</b> terkait proses pidana di mana putusan telah dijatuhkan dengan niat dan kemampuan menjalankan ancaman.`,
+        "PC-603(a)": `Seseorang yang dengan sengaja dan jahat <b>mencegah korban/saksi</b> untuk tidak hadir atau tidak memberikan kesaksian di persidangan/penyelidikan dengan <b>suap</b>, <b>ketakutan</b>, atau taktik lainnya.`,
+        "PC-603(b)": `Seseorang yang mencegah <b>distribusi</b>, <b>penyelesaian</b>, atau <b>proses hukum</b> terhadap surat pernyataan atau pernyataan hukum lainnya.`,
+        "PC-604": `Seseorang yang telah diproses masuk ke <b>penjara</b> karena dugaan/hukuman atas kejahatan, yang kemudian <b>melarikan diri</b> dari penjara, layanan masyarakat, rumah sakit, atau penahanan petugas.`,
+        "PC-605(a)": `Seseorang yang secara langsung <b>membantu</b> atau <b>menolong</b> orang yang ditahan untuk <b>melarikan diri</b> dari hukum, penahanan, transportasi tahanan, pembebasan bersyarat, atau penjara.`,
+        "PC-605(b)": `Seseorang yang memberikan <b>informasi</b> atau <b>wawasan</b> yang membantu orang yang ditahan untuk <b>melarikan diri</b>.`,
+        "PC-606(a)": `Seseorang yang dengan sengaja memberikan <b>informasi palsu</b> sebagai bagian dari surat pernyataan, kesaksian, atau dokumen di bawah ancaman pidana perjury.`,
+        "PC-606(b)": `<b>Petugas perdamaian</b> yang dengan sengaja dan niat membuat pernyataan material <b>palsu</b> dalam laporan resmi atau kepada petugas perdamaian lainnya.`,
+        "PC-607(a)": `Seseorang yang <b>melaporkan</b> kepada petugas perdamaian atau jaksa distrik bahwa felony/misdemeanor telah dilakukan, mengetahui bahwa laporan tersebut <b>palsu</b>.`,
+        "PC-607(b)": `Seseorang yang <b>melaporkan senjata api</b> sebagai hilang/dicuri, mengetahui bahwa laporan tersebut <b>palsu</b>.`,
+        "PC-608": `Seseorang yang dengan sengaja mengajukan <b>keluhan palsu</b>, pernyataan, dokumen, atau representasi kepada organisasi mengenai perilaku pejabat publik dengan tujuan memulai tindakan administratif palsu.`,
+        "PC-609(a)": `<b>Petugas keamanan</b>, pegawai agen penegak hukum, atau jaksa negara yang <b>mengungkapkan</b> atau <b>meminta</b> informasi investigasi kriminal untuk <b>keuntungan finansial</b>.`,
+        "PC-609(b)": `<b>Petugas keamanan</b> yang memiliki wewenang untuk menerima/menangkap seseorang yang didakwa dengan pelanggaran kriminal dan dengan sengaja <b>menolak</b> menerima/menangkap orang tersebut.`,
+        "PC-609(c)": `Setiap <b>pegawai negara</b> yang menunjukkan <b>kelalaian kriminal</b> dalam tugasnya.`,
+        "PC-610(a)": `Setiap orang yang menunjukkan usaha jelas dan termotivasi untuk <b>mencegah</b> atau <b>menunda</b> seorang pegawai negara dalam melaksanakan tugasnya.`,
+        "PC-610(b)": `Setiap orang yang <b>gagal mematuhi perintah sah</b> dari petugas keamanan.`,
+        "PC-611(a)": `Setiap orang yang <b>menghindari penangkapan</b> dari petugas keamanan secara <b>non-kendaraan</b> atau <b>melawan</b> penangkapan secara <b>fisik</b>.`,
+        "PC-611(b)": `Setiap orang yang saat menunggu tuduhan diajukan, secara fisik ditahan dengan <b>alat pembatas</b> atau kekuatan fisik oleh petugas keamanan, dan <b>melarikan diri</b> dari penjagaan.`,
+        "PC-612": `Setiap orang yang <b>gagal membayar denda</b> atau biaya yang diperintahkan pengadilan dalam periode waktu yang telah ditentukan.`,
+        "PC-613": `Seseorang yang saat <b>ditahan</b> atau <b>ditangkap</b> oleh petugas keamanan, tidak memberikan <b>nama</b> seperti tertera pada kartu identitas atau informasi pengenal lainnya untuk tujuan <b>MDC</b>.`,
+        "PC-614(a)": `Seseorang yang berpura-pura atau menyiratkan peran sebagai pekerja <b>pemerintah negara/daerah</b> (petugas keamanan, paramedis, pengumpul pajak, jaksa, dll).`,
+        "PC-614(b)": `Seseorang yang mengenakan <b>seragam pegawai negara</b> resmi/realistis dengan <b>lencana</b> atau <b>tag identifikasi</b>, kecuali dalam set film/produksi resmi.`,
+        "PC-614(c)": `Seseorang yang berpura-pura atau menyiratkan peran sebagai <b>pegawai federal</b> (penyidik federal, jaksa federal, pejabat federal lainnya).`,
+        "PC-615": `Seseorang yang melaporkan atau menyebabkan laporan dibuat kepada <b>departemen negara</b> dan/atau <b>nomor darurat</b> bahwa ada "keadaan darurat", mengetahui laporan tersebut <b>palsu</b>.`,
+        "PC-616": `Seseorang yang menghancurkan, berusaha menghancurkan, menyembunyikan, atau mengubah <b>bukti</b> yang dapat digunakan dalam penyelidikan kriminal atau proses pengadilan.`,
+        "PC-617": `Seseorang yang memberikan <b>barang terlarang</b> kepada narapidana di fasilitas pemasyarakatan, atau berusaha memasuki fasilitas dengan niat mengangkut barang terlarang secara ilegal.`,
+        "PC-618": `Seseorang yang dengan sengaja <b>melanggar ketentuan perjanjian parol</b>.`,
+        "PC-619(a)": `Seseorang yang <b>menghalangi</b> atau <b>memengaruhi</b> hasil pemungutan suara secara ilegal, tidak sah, atau tidak etis.`,
+        "PC-619(b)": `<b>Membeli suara</b> — menjanjikan, menawarkan, atau memberikan manfaat tidak semestinya agar seseorang memberikan/tidak memberikan suara.`,
+        "PC-620": `Seseorang yang bertindak di luar kepentingan <b>kebaikan publik</b>, <b>keadilan publik</b>, atau <b>tugas</b> mereka yang menjabat di kantor publik.`,
+        "PC-621": `Seseorang yang dengan sengaja tidak mematuhi <b>perintah lisan/tertulis dari Senat</b>, tidak menghormati <b>tata krama</b> Senat, atau melanggar proses senat lainnya.`,
+        "PC-622": `Seseorang yang dengan sengaja tidak mematuhi <b>perintah lisan/tertulis dari otoritas pengadilan</b>, tidak menghormati tata krama pengadilan, atau melanggar proses hukum lainnya.`,
+        "PC-623": `Seseorang yang mengabaikan atau melanggar <b>perintah subpoena</b> yang dikeluarkan oleh Pengadilan.`,
+        "PC-701": `Seseorang yang mengemudikan kendaraan di jalan umum/raya dengan sengaja atau sembarangan mengabaikan <b>keamanan</b> orang atau harta benda.`,
+        "PC-702": `Mengemudikan kendaraan dengan sengaja/sembarangan mengabaikan keamanan seperti hampir menabrak pejalan kaki, memasuki jalur pejalan kaki, atau hampir menyebabkan bahaya serius; menggunakan kendaraan berbahaya bagi penumpang/pejalan kaki; mengemudi di jalur berlawanan; menyebabkan cedera fisik. <b>+ suspend lisensi 24 jam.</b>`,
+        "PC-703(a)": `Mengemudikan kendaraan di bawah pengaruh <b>alkohol</b> dengan kadar alkohol <b>0,08%</b> atau lebih. <b>+ suspend lisensi 24 jam.</b>`,
+        "PC-703(b)": `<b>Pegawai negara</b> yang mengemudikan kendaraan di bawah pengaruh narkoba/alkohol saat bertugas. <b>+ suspend lisensi 24 jam.</b>`,
+        "PC-703(c)": `Mengemudikan <b>kendaraan komersial</b> saat di bawah pengaruh narkoba atau memiliki kadar alkohol <b>0,04%</b> atau lebih. <b>+ suspend lisensi 24 jam.</b>`,
+        "PC-703(d)": `Mengemudikan kendaraan saat <b>terganggu</b> oleh alkohol, narkoba, atau kombinasi keduanya. <b>+ suspend lisensi 24 jam.</b>`,
+        "PC-704": `Saat mengoperasikan kendaraan bermotor, dengan sengaja <b>melarikan diri</b> atau berusaha menghindar dari kendaraan petugas keamanan yang mengejarnya. <b>+ suspend lisensi 48 jam.</b>`,
+        "PC-705": `Saat mengoperasikan kendaraan bermotor, melarikan diri atau berusaha menghindar dari petugas keamanan sambil mengemudikan kendaraan secara <b>ceroboh</b> atau <b>berbahaya</b>. <b>+ suspend lisensi 60 jam.</b>`,
+        "PC-706(a)": `Mengoperasikan kendaraan bermotor dan terlibat dalam <b>kecelakaan</b> yang mengakibatkan <b>cedera</b> atau <b>kematian</b> orang lain, dan tidak segera menghentikan kendaraan di lokasi kecelakaan. <b>+ suspend lisensi 24 jam.</b>`,
+        "PC-706(b)": `Mengoperasikan kendaraan bermotor dan terlibat dalam kecelakaan yang hanya mengakibatkan <b>kerusakan harta benda</b>, dan tidak segera menghentikan kendaraan di lokasi. <b>+ suspend lisensi 24 jam.</b>`,
+        "PC-801": `Tindakan dengan sengaja <b>mengeluarkan</b>, <b>menampilkan</b>, atau <b>menunjukan</b> senjata api atau senjata mematikan dengan tujuan untuk <b>mengancam nyawa</b> 1 orang atau lebih.`,
+        "PC-802": `Setiap tindakan seseorang yang dengan sengaja <b>menembakkan senjata api</b> di tempat umum atau gedung pemerintahan tanpa alasan jelas, dan bisa membahayakan nyawa orang lain atau tidak.<br><br><b>Pengecualian:</b> (a) Tidak berlaku untuk bela diri atau petugas berwenang. (b) Jika menyebabkan cedera → naikkan ke felony 802(b).`,
+        "PC-802(b)": `<b>Eskalasi dari 802:</b> Jika tembakan menyebabkan cedera fisik pada orang lain, naikkan dari misdemeanor ke felony (40 menit, $1.500).`,
+        "PC-803": `Seseorang yang dengan sengaja <b>membawa senjata mematikan</b> di tempat umum, atau tempat pribadi tanpa persetujuan pemilik properti, atau tanpa lisensi valid dari pemilik properti.`,
+        "PC-804(a)": `Seseorang yang memiliki <b>senjata api yang tidak terdaftar</b> di negara bagian San Andreas.`,
+        "PC-804(b)": `Seseorang yang memiliki <b>senjata api dari hasil curian</b> di negara bagian San Andreas.`,
+        "PC-804(c)": `Seseorang yang memiliki <b>senjata replika</b> dengan niat untuk mengancam nyawa orang lain.`,
+        "PC-805": `Seseorang yang memiliki senjata api yang dihasilkan atau dibeli secara <b>ilegal</b>.`,
+        "PC-806": `Seseorang yang <b>mencuri</b> atau <b>mengambil senjata api</b> orang lain, dengan cara sadar/tidak sadar, dengan mengancam atau tidak.`,
+        "PC-807": `Seseorang yang memiliki senjata api ilegal dengan niat untuk <b>diperjual-belikan</b>.`,
+        "PC-808": `Seseorang yang <b>memodifikasi senjata api secara ilegal</b> seperti <b>suppressor</b>, <b>full-auto conversion</b>, atau <b>extended magazine</b> tanpa izin.`,
+        "PC-809": `Seseorang yang <b>menyimpan senjata api tanpa pengamanan memadai</b> (tidak dikunci atau diakses anak di bawah umur).`,
+        "VC-101-MC": `<b>VC 101 — Vehicle Registration Violation (Motorcycle).</b><br><br>Mengemudikan, memindahkan, atau meninggalkan kendaraan di jalan umum yang <b>belum terdaftar</b> di San Andreas, atau <b>tanpa nomor plat valid</b>. Kendaraan akan <b>disita</b>.<br><br><b>Denda berdasarkan Level kendaraan (1-5 = $325, +$325 setiap 5 level):</b><br>Lv 1-5: $325 | Lv 96-100: $6,500`,
+        "VC-101-Car": `<b>VC 101 — Vehicle Registration Violation (Car).</b><br><br>Mengemudikan, memindahkan, atau meninggalkan kendaraan di jalan umum yang <b>belum terdaftar</b> di San Andreas, atau <b>tanpa nomor plat valid</b>. Kendaraan akan <b>disita</b>.<br><br><b>Denda berdasarkan Level kendaraan (1-5 = $650, +$650 setiap 5 level):</b><br>Lv 1-5: $650 | Lv 96-100: $13,000`,
+        "VC-101-Com": `<b>VC 101 — Vehicle Registration Violation (Commercial).</b><br><br>Mengemudikan, memindahkan, atau meninggalkan kendaraan di jalan umum yang <b>belum terdaftar</b> di San Andreas, atau <b>tanpa nomor plat valid</b>. Kendaraan akan <b>disita</b>.<br><br><b>Denda berdasarkan Level kendaraan (1-5 = $488, +$488 setiap 5 level):</b><br>Lv 1-5: $488 | Lv 96-100: $9,750`,
+        "VC-101-Sport": `<b>VC 101 — Vehicle Registration Violation (Sport).</b><br><br>Mengemudikan, memindahkan, atau meninggalkan kendaraan di jalan umum yang <b>belum terdaftar</b> di San Andreas, atau <b>tanpa nomor plat valid</b>. Kendaraan akan <b>disita</b>.<br><br><b>Denda berdasarkan Level kendaraan (1-5 = $813, +$813 setiap 5 level):</b><br>Lv 1-5: $813 | Lv 96-100: $16,250`,
+        "VC-201(a)": `<b>(a)</b> Seseorang yang mengemudikan, memindahkan, atau menggunakan kendaraan bermotor di jalan umum tanpa memiliki <b>SIM valid</b> yang diterbitkan negara, atau mengemudi dengan SIM yang telah <b>dicabut</b>. Kendaraan akan ditahan sesuai kebijakan petugas.`,
+        "VC-201(b)": `<b>(b)</b> Seseorang yang mengemudikan kendaraan di jalan umum tanpa memiliki <b>SIM dalam penguasaan fisik</b> mereka.`,
+        "VC-201(c)": `<b>(c)</b> Seseorang yang mengemudikan kendaraan di jalan umum dengan <b>SIM yang kedaluwarsa</b>.`,
+        "VC-202": `Seseorang yang mengemudikan kendaraan di jalan umum dengan SIM yang <b>disita</b>, tetapi masih <b>valid</b>, yang diterbitkan negara. Kendaraan akan ditahan sesuai kebijakan petugas.`,
+        "VC-203(a)": `<b>(a)</b> Seseorang berusia <b>16-18 tahun</b> yang <b>belum menyelesaikan kursus mengemudi</b> resmi, mengemudikan kendaraan di jalan umum tanpa memiliki <b>izin belajar valid</b>. Izin belajarnya akan <b>dicabut</b>.`,
+        "VC-203(b)": `<b>(b)</b> Seseorang berusia <b>16-18 tahun</b> yang <b>telah menyelesaikan kursus mengemudi</b>, mengemudikan kendaraan di jalan umum tanpa didampingi <b>orang dewasa 18+</b> yang memiliki SIM valid. Izin belajarnya akan <b>dicabut</b>.`,
+        "VC-301": `Seseorang yang mengemudikan kendaraan di jalan umum tanpa <b>asuransi kendaraan bermotor</b> yang valid. Kendaraan akan <b>ditahan</b> sesuai kebijakan petugas.`,
+        "VC-401(a)": `<b>(a)</b> Mengemudikan kendaraan di <b>daerah bisnis</b> atau <b>kawasan pemukiman</b> dengan kecepatan <b>lebih dari 40 MPH</b>. Denda $200 + <b>1 poin</b> pada SIM.`,
+        "VC-401(b)": `<b>(b)</b> Mengemudikan kendaraan di jalan yang <b>tidak</b> berada di daerah bisnis/pemukiman dengan kecepatan <b>lebih dari 65 MPH</b>. Denda $500 + <b>1 poin</b> pada SIM.`,
+        "VC-401(c)": `<b>(c)</b> Mengemudikan kendaraan di <b>jalan raya</b> dengan kecepatan <b>lebih dari 90 MPH</b>. Denda $750 + <b>2 poin</b> pada SIM.`,
+        "VC-401(d)": `<b>(d)</b> Mengemudikan kendaraan dengan kecepatan <b>lebih besar dari yang wajar</b> dengan mempertimbangkan cuaca, visibilitas, dan lalu lintas. Denda $200 + <b>2 poin</b> pada SIM.`,
+        "VC-402": `Mengemudikan kendaraan yang <b>tidak memberikan hak jalan</b> kepada pengemudi lain di persimpangan.<br><br><b>Aturan:</b> Kendaraan pertama yang tiba di persimpangan memiliki hak jalan. Kendaraan yang sudah berada di dalam persimpangan juga memiliki hak jalan.`,
+        "VC-403": `Mengemudikan kendaraan yang <b>tidak memberikan hak jalan</b> dan segera mengemudikan kendaraannya ke sisi kanan jalan kepada <b>kendaraan darurat</b> yang membunyikan sirene dan memiliki lampu merah/biru yang terlihat.`,
+        "VC-404": `Mengemudikan kendaraan yang <b>tidak mematuhi tanda</b>, <b>sinyal</b>, atau <b>perangkat pengatur lalu lintas</b> termasuk tanda berhenti, lampu lalu lintas, jalur penyeberangan pejalan kaki, dan arahan petugas keamanan/pekerja konstruksi.`,
+        "VC-405": `Berhenti, memarkir, atau meninggalkan kendaraan di tempat yang <b>dilarang</b>: menghalangi persimpangan/gang/jalur penyeberangan, menghalangi trotoar, menghadap arah berlawanan, di median, di terowongan, di samping hydrant, di jalur pemadam kebakaran, di atas rel kereta, di area ambulans, atau di depan jalur masuk pribadi. <b>+ penyitaan kendaraan.</b>`,
+        "VC-406": `Kendaraan yang mengeluarkan <b>suara berlebihan</b>, menciptakan gangguan publik. Contoh: modifikasi untuk meningkatkan polusi suara, atau penggunaan klakson/sirene berlebihan tanpa tujuan.`,
+        "VC-407": `Mengemudikan kendaraan bermotor di jalan umum yang menggunakan <b>peralatan hidrolik</b> saat bergerak.`,
+        "VC-408": `Menggunakan <b>sepeda</b> atau kendaraan bermotor lain dengan cara yang menghalangi lalu lintas, memicu kekacauan, menciptakan bahaya, atau menunjukkan potensi menimbulkan bahaya.`,
+        "VC-409": `Berjalan di antara persimpangan yang dikendalikan <b>lampu lalu lintas</b> atau petugas keamanan, di tempat selain <b>jalur penyeberangan</b>. (Jaywalking)`,
+        "VC-410": `Terlibat dalam <b>perlombaan kecepatan</b> kendaraan bermotor di jalan umum — termasuk melawan kendaraan lain, jam, atau perangkat pengukur waktu lainnya.`,
+        "VC-411": `Mengemudikan <b>kendaraan komersial</b>, <b>truk berat</b>, atau <b>kendaraan berukuran besar</b> pada jalan yang tidak ditetapkan sebagai <b>rute truk</b>, atau memasuki wilayah kota tanpa izin. <b>+ penyitaan kendaraan.</b> Pengecualian berlaku bagi kendaraan/pengemudi yang mendapat izin dari kepolisian setempat.`,
+        "VC-412": `Mengemudikan <b>kendaraan komersial</b>, <b>kendaraan berat</b>, atau kendaraan yang membutuhkan <b>lisensi kelas khusus</b> tanpa memiliki lisensi yang sesuai, kedaluwarsa, atau dicabut. Jika pelanggaran mengakibatkan bahaya/kerusakan/gangguan lalu lintas, tambahan <b>$500</b> dapat diterapkan.`,
+        "VC-501": `Mengemudikan kendaraan bermotor dengan bahan yang <b>menghalangi</b> yang dipasang pada <b>kaca depan</b>, <b>jendela samping</b>, atau <b>jendela belakang</b>. (Tinted Windows)`,
+        "VC-502": `Mengemudikan kendaraan bermotor saat <b>gelap</b> (antara senja dan fajar) atau dalam kondisi cuaca buruk dengan visibilitas rendah (hujan, kabut, salju) <b>tanpa menggunakan lampu depan</b>.`,
+        "VC-503": `Mengemudikan kendaraan bermotor dengan salah satu kondisi tidak aman:<br>(a) Ban kempes atau hilang.<br>(b) Lampu belakang rusak/mati.<br>(c) Hilangnya pintu, kap mesin, atau penutup bagasi.<br>(d) Pintu, kap mesin, atau bagasi dalam posisi terbuka.`,
+        "VC-504": `Mengemudikan atau memiliki <b>kendaraan dengan lampu darurat</b> (merah/biru) <b>tanpa izin resmi</b>. <b>+ penyitaan kendaraan</b> sampai lampu darurat dihilangkan.`,
+        "VC-601": `Pengemudi dan penumpang yang mengoperasikan atau mengendarai <b>sepeda motor</b> atau sepeda motor bertenaga <b>tanpa menggunakan helm keselamatan</b>.`,
+        "VC-602": `Mengoperasikan kendaraan yang mampu menarik/mengangkut kendaraan lain tanpa cara yang aman — kecepatan dengan muatan, tidak memberikan hak jalan, membiarkan penumpang naik di trailer/kendaraan yang ditarik, atau cara pengoperasian yang tidak aman.`,
+        "VC-603": `Mengoperasikan <b>mesin</b> seperti bulldozer, dump, handler, dune, zhaba, rallytruck, airtug, caddy, docktug, forklift, mower, atau ripley di jalan umum. Pengecualian untuk penegak hukum/pemadam kebakaran dalam situasi mendesak.`,
+        "VC-604": `Mengoperasikan <b>kendaraan off-road</b> di jalan umum. Kendaraan dapat ditahan sesuai kebijakan petugas. Pengecualian untuk penegak hukum/pemadam kebakaran dalam situasi mendesak.`,
+        "VC-605": `Melanggar salah satu ketentuan:<br>(a) Mengizinkan seseorang naik di bagian kendaraan yang tidak dimaksudkan untuk penumpang.<br>(b) Naik di bagian kendaraan yang tidak dimaksudkan untuk penumpang.<br>(c) Mengizinkan seseorang naik di bagasi.<br>(d) Naik di bagasi kendaraan.`,
+      };
+
+      function getExplanation(p) {
+        const key = `${p.category}-${p.code}`;
+        return EXPLANATIONS[key] || p.desc || "-";
+      }
+
+      // ============================================
+      // 🔑  PASSWORD UNTUK MANAJEMEN KODE
+      //     GANTI dengan password rahasia Anda!
+      // ============================================
+      const MANAGE_PASSWORD = "rinalfemboy2029";
+      const AUTH_KEY = "penalcode_manage_auth";
+
+      const STORAGE_KEY = "penalcode_data_v3";
+      const SUSPECT_KEY = "penalcode_suspects_v3";
+      const ACTIVE_SUSPECT_KEY = "penalcode_active_suspect_v3";
+
+      let pcs = [];
+      let suspects = [];
+      let activeSuspectId = null;
+      let currentFilter = "all";
+      let currentCat = "all";
+      let currentFilterInfo = "all";
+      let currentCatInfo = "all";
+
+      // ==================== STORAGE ====================
+      function assignIds(list) {
+        return list.map((p, i) => ({
+          id: p.id || "pc_" + i + "_" + Date.now(),
+          ...p,
+        }));
+      }
+      function genId(prefix) {
+        return (
+          prefix +
+          "_" +
+          Date.now() +
+          "_" +
+          Math.random().toString(36).slice(2, 6)
+        );
+      }
+      function loadData() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          try {
+            pcs = JSON.parse(raw);
+          } catch (e) {
+            pcs = assignIds(ALL_DEFAULT);
+          }
+        } else {
+          pcs = assignIds(ALL_DEFAULT);
+          saveData();
+        }
+        if (!Array.isArray(pcs) || pcs.length === 0) {
+          pcs = assignIds(ALL_DEFAULT);
+          saveData();
+        }
+
+        const sRaw = localStorage.getItem(SUSPECT_KEY);
+        if (sRaw) {
+          try {
+            suspects = JSON.parse(sRaw);
+          } catch (e) {
+            suspects = [];
+          }
+        }
+        if (!Array.isArray(suspects) || suspects.length === 0) {
+          suspects = [{ id: genId("s"), name: "Suspect 1", selected: {} }];
+          saveSuspects();
+        }
+        suspects.forEach((s) => {
+          if (!s.selected) s.selected = {};
+        });
+
+        activeSuspectId =
+          localStorage.getItem(ACTIVE_SUSPECT_KEY) || suspects[0].id;
+        if (!suspects.find((s) => s.id === activeSuspectId))
+          activeSuspectId = suspects[0].id;
+      }
+      function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(pcs));
+      }
+      function saveSuspects() {
+        localStorage.setItem(SUSPECT_KEY, JSON.stringify(suspects));
+        localStorage.setItem(ACTIVE_SUSPECT_KEY, activeSuspectId || "");
+      }
+      function getActiveSuspect() {
+        return (
+          suspects.find((s) => s.id === activeSuspectId) || suspects[0] || null
+        );
+      }
+
+      // ==================== FORMAT ====================
+      function formatJail(mins) {
+        mins = Number(mins) || 0;
+        if (mins === 0) return "0 menit";
+        const h = Math.floor(mins / 60),
+          m = mins % 60;
+        const parts = [];
+        if (h > 0) parts.push(h + " jam");
+        if (m > 0) parts.push(m + " menit");
+        return parts.join(" ");
+      }
+      function formatMoney(n) {
+        return "$" + (Number(n) || 0).toLocaleString("en-US");
+      }
+      function typeClass(t) {
+        if (t === "Felony") return "felony";
+        if (t === "Infraction") return "info";
+        return "misd";
+      }
+      function typeShort(t) {
+        if (t === "Misdemeanor") return "Misd";
+        if (t === "Infraction") return "Infra";
+        return t;
+      }
+      function catClass(c) {
+        return c === "VC" ? "cat-vc" : "cat-pc";
+      }
+      function catShort(c) {
+        return c === "VC" ? "VC" : "PC";
+      }
+      function computeFine(p, level) {
+        if (p.vary && level) return p.vary.base * Math.ceil(level / 5);
+        return Number(p.fine) || 0;
+      }
+
+      // ==================== TOTALS ====================
+      function computeSuspectTotals(suspect) {
+        let totalJail = 0,
+          totalFine = 0,
+          totalPoints = 0,
+          hasLife = false;
+        const details = [];
+        Object.entries(suspect.selected || {}).forEach(([id, data]) => {
+          const p = pcs.find((x) => x.id === id);
+          if (!p) return;
+          const fine = computeFine(p, data.level);
+          totalFine += fine;
+          totalPoints += Number(p.points) || 0;
+          if (p.life) hasLife = true;
+          else totalJail += Number(p.jail) || 0;
+          details.push({ p, data, fine });
+        });
+        return {
+          totalJail,
+          totalFine,
+          totalPoints,
+          hasLife,
+          details,
+          count: details.length,
+        };
+      }
+
+      // ==================== RENDER KALKULATOR ====================
+      function renderCalc(filter = "") {
+        const suspect = getActiveSuspect();
+        if (!suspect) return;
+        document.getElementById("activeSuspectName").textContent = suspect.name;
+
+        const el = document.getElementById("calcList");
+        const q = filter.toLowerCase();
+        let list = pcs.filter(
+          (p) =>
+            (p.code || "").toLowerCase().includes(q) ||
+            (p.desc || "").toLowerCase().includes(q),
+        );
+        if (currentFilter !== "all")
+          list = list.filter((p) => p.type === currentFilter);
+        if (currentCat !== "all")
+          list = list.filter((p) => p.category === currentCat);
+
+        if (list.length === 0) {
+          el.innerHTML = '<div class="empty">Tidak ada kode</div>';
+          return;
+        }
+
+        el.innerHTML = list
+          .map((p) => {
+            const sel = suspect.selected[p.id];
+            const isSel = !!sel;
+            const level = isSel && sel.level ? sel.level : "";
+            const fine = isSel ? computeFine(p, level) : p.fine;
+            return `
+    <div class="list-item">
+      <input type="checkbox" data-id="${p.id}" ${isSel ? "checked" : ""}>
+      <div class="info">
+        <div class="code">
+          ${catShort(p.category)} ${escapeHtml(p.code)}
+          <span class="badge ${catClass(p.category)}">${catShort(p.category)}</span>
+          <span class="badge ${typeClass(p.type)}">${typeShort(p.type)}</span>
+          ${p.life ? '<span class="badge life">LIFE</span>' : ""}
+        </div>
+        <div class="desc">$ <span style="color:#4fc3f7;">${catShort(p.category)} ${escapeHtml(p.code)}</span> — ${escapeHtml(p.desc || "-")}
+</div>
+        <div class="meta">
+          ${
+            p.life
+              ? '<span class="meta-jail">🕒 Seumur Hidup</span>'
+              : p.jail > 0
+                ? `<span class="meta-jail">🕒 ${formatJail(p.jail)}</span>`
+                : ""
+          }
+          <span class="meta-fine">💰 ${formatMoney(fine)}</span>
+          ${p.points > 0 ? `<span class="meta-points">📍 ${p.points} poin</span>` : ""}
+        </div>
+        ${
+          p.vary
+            ? `
+          <div class="vary-input">
+            <label>Level (1-100):</label>
+            <input type="number" min="1" max="100" value="${level}" data-vary-id="${p.id}">
+          </div>`
+            : ""
+        }
+      </div>
+    </div>`;
+          })
+          .join("");
+
+        el.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+          cb.addEventListener("change", (e) => {
+            const id = e.target.dataset.id;
+            const s = getActiveSuspect();
+            if (e.target.checked) {
+              const p = pcs.find((x) => x.id === id);
+              s.selected[id] = p.vary ? { level: 1 } : {};
+            } else delete s.selected[id];
+            saveSuspects();
+            renderCalc(document.getElementById("searchCalc").value);
+            updateTotals();
+          });
+        });
+        el.querySelectorAll("input[data-vary-id]").forEach((inp) => {
+          inp.addEventListener("input", (e) => {
+            const id = e.target.dataset.varyId;
+            const val = Math.max(1, Math.min(100, Number(e.target.value) || 1));
+            const s = getActiveSuspect();
+            s.selected[id] = { ...(s.selected[id] || {}), level: val };
+            saveSuspects();
+            const p = pcs.find((x) => x.id === id);
+            const metaFine = e.target
+              .closest(".list-item")
+              .querySelector(".meta-fine");
+            metaFine.textContent = "💰 " + formatMoney(computeFine(p, val));
+            updateTotals();
+          });
+        });
+      }
+
+      // ==================== RENDER MANAJEMEN ====================
+      function renderManage(filter = "") {
+        const el = document.getElementById("manageList");
+        const q = filter.toLowerCase();
+        const list = pcs.filter(
+          (p) =>
+            (p.code || "").toLowerCase().includes(q) ||
+            (p.desc || "").toLowerCase().includes(q),
+        );
+        document.getElementById("pcCount").textContent = pcs.length;
+        if (list.length === 0) {
+          el.innerHTML = '<div class="empty">Tidak ada kode</div>';
+          return;
+        }
+        el.innerHTML = list
+          .map(
+            (p) => `
+    <div class="list-item">
+      <div class="info">
+        <div class="code">
+          ${catShort(p.category)} ${escapeHtml(p.code)}
+          <span class="badge ${catClass(p.category)}">${catShort(p.category)}</span>
+          <span class="badge ${typeClass(p.type)}">${typeShort(p.type)}</span>
+          ${p.life ? '<span class="badge life">LIFE</span>' : ""}
+        </div>
+        <div class="desc">${escapeHtml(p.desc || "-")}</div>
+        <div class="meta">
+          ${
+            p.life
+              ? '<span class="meta-jail">🕒 Seumur Hidup</span>'
+              : p.jail > 0
+                ? `<span class="meta-jail">🕒 ${formatJail(p.jail)}</span>`
+                : ""
+          }
+          <span class="meta-fine">💰 ${formatMoney(p.fine)}</span>
+          ${p.points > 0 ? `<span class="meta-points">📍 ${p.points} poin</span>` : ""}
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn-secondary btn-sm" onclick="editPc('${p.id}')">✏️</button>
+        <button class="btn-danger btn-sm" onclick="deletePc('${p.id}')">🗑️</button>
+      </div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      // ==================== RENDER INFO ====================
+      function renderInfo(filter = "") {
+        const el = document.getElementById("infoList");
+        if (!el) return;
+        const q = filter.toLowerCase();
+        let list = pcs.filter(
+          (p) =>
+            (p.code || "").toLowerCase().includes(q) ||
+            (p.desc || "").toLowerCase().includes(q),
+        );
+        if (currentCatInfo !== "all")
+          list = list.filter((p) => p.category === currentCatInfo);
+        if (currentFilterInfo !== "all")
+          list = list.filter((p) => p.type === currentFilterInfo);
+
+        document.getElementById("infoCount").textContent = list.length;
+
+        if (list.length === 0) {
+          el.innerHTML = '<div class="empty">Tidak ada kode yang cocok</div>';
+          return;
+        }
+
+        const pcsList = list.filter((p) => p.category === "PC");
+        const vcsList = list.filter((p) => p.category === "VC");
+
+        let html = "";
+        if (pcsList.length > 0) {
+          html += `<div class="cat-label">🚔 Penal Code (${pcsList.length})</div>`;
+          html += pcsList.map((p) => renderInfoItem(p)).join("");
+        }
+        if (vcsList.length > 0) {
+          html += `<div class="cat-label">🚗 Vehicle Code (${vcsList.length})</div>`;
+          html += vcsList.map((p) => renderInfoItem(p)).join("");
+        }
+        el.innerHTML = html;
+      }
+
+      function renderInfoItem(p) {
+        const borderColor = p.category === "VC" ? "#8e24aa" : "#1e88e5";
+        const fullText = getExplanation(p);
+        return `
+    <div class="list-item" style="border-left: 3px solid ${borderColor};">
+      <div class="info">
+        <div class="code">
+          ${catShort(p.category)} ${escapeHtml(p.code)}
+          <span class="badge ${catClass(p.category)}">${catShort(p.category)}</span>
+          <span class="badge ${typeClass(p.type)}">${typeShort(p.type)}</span>
+          ${p.life ? '<span class="badge life">LIFE</span>' : ""}
+        </div>
+        <div style="color:#e6e6e6; font-weight:700; font-size:0.95rem; margin-top:6px; line-height:1.4;">
+          <span style="color:#4fc3f7;">${catShort(p.category)} ${escapeHtml(p.code)}.</span> ${escapeHtml(p.desc || "-")}
+        </div>
+        <div class="desc" style="line-height:1.6; font-size:0.82rem; margin-top:6px;">${fullText}</div>
+        <div class="meta" style="margin-top:10px;">
+          ${
+            p.life
+              ? '<span class="meta-jail">🕒 Seumur Hidup</span>'
+              : p.jail > 0
+                ? `<span class="meta-jail">🕒 ${formatJail(p.jail)}</span>`
+                : ""
+          }
+          ${
+            p.fine > 0 || p.vary
+              ? `<span class="meta-fine">💰 ${p.vary ? formatMoney(p.fine) + " (variabel per level)" : formatMoney(p.fine)}</span>`
+              : ""
+          }
+          ${p.points > 0 ? `<span class="meta-points">📍 ${p.points} poin</span>` : ""}
+        </div>
+      </div>
+    </div>`;
+      }
+      // ==================== RENDER SUSPECT TABS ====================
+      function renderSuspectTabs() {
+        const el = document.getElementById("suspectTabs");
+        document.getElementById("suspectCount").textContent = suspects.length;
+        if (suspects.length === 0) {
+          el.innerHTML = '<div class="empty">Belum ada suspect</div>';
+          return;
+        }
+        el.innerHTML = suspects
+          .map((s) => {
+            const t = computeSuspectTotals(s);
+            const isActive = s.id === activeSuspectId;
+            return `<div class="suspect-chip ${isActive ? "active" : ""}" data-id="${s.id}">
+      <div class="sc-name">${escapeHtml(s.name)}</div>
+      <div class="sc-meta">${t.count} pasal • ${t.hasLife ? "LIFE" : formatJail(t.totalJail)} • ${formatMoney(t.totalFine)}</div>
+    </div>`;
+          })
+          .join("");
+        el.querySelectorAll(".suspect-chip").forEach((chip) => {
+          chip.addEventListener("click", () => {
+            activeSuspectId = chip.dataset.id;
+            saveSuspects();
+            renderCalc(document.getElementById("searchCalc").value);
+            updateTotals();
+          });
+        });
+      }
+
+      // ==================== RENDER ALL SUMMARY ====================
+      function renderAllSummary() {
+        const el = document.getElementById("allSuspectsSummary");
+        if (suspects.length === 0) {
+          el.innerHTML = '<div class="empty">Belum ada suspect</div>';
+          return;
+        }
+        let gtJail = 0,
+          gtFine = 0,
+          gtPoints = 0,
+          gtLife = false,
+          gtCount = 0;
+        const rows = suspects
+          .map((s) => {
+            const t = computeSuspectTotals(s);
+            if (t.hasLife) gtLife = true;
+            else gtJail += t.totalJail;
+            gtFine += t.totalFine;
+            gtPoints += t.totalPoints;
+            gtCount += t.count;
+            return `<div class="selected-item">
+      <span class="name">${escapeHtml(s.name)}</span>
+      <span class="val">${t.count} pasal • ${t.hasLife ? "LIFE" : formatJail(t.totalJail)} • ${formatMoney(t.totalFine)}${t.totalPoints ? " • " + t.totalPoints + "p" : ""}</span>
+    </div>`;
+          })
+          .join("");
+        el.innerHTML =
+          rows +
+          `
+    <div class="section-divider"></div>
+    <div class="selected-item" style="background:#1e3a5f; border:1px solid #4fc3f7;">
+      <span class="name" style="color:#4fc3f7;font-weight:700;">TOTAL SEMUA (${suspects.length} suspect)</span>
+      <span class="val" style="color:#e6e6e6;font-weight:700;">${gtCount} pasal • ${gtLife ? "LIFE" : formatJail(gtJail)} • ${formatMoney(gtFine)}${gtPoints ? " • " + gtPoints + "p" : ""}</span>
+    </div>
+  `;
+      }
+
+      // ==================== UPDATE TOTALS ====================
+      function updateTotals() {
+        const suspect = getActiveSuspect();
+        if (!suspect) return;
+        const t = computeSuspectTotals(suspect);
+
+        document.getElementById("activeSuspectName").textContent = suspect.name;
+        document.getElementById("resultSuspectName").textContent = suspect.name;
+
+        const jailEl = document.getElementById("totalJail");
+        if (t.hasLife) {
+          jailEl.textContent = "SEUMUR HIDUP";
+          jailEl.classList.add("life");
+        } else {
+          jailEl.textContent = formatJail(t.totalJail);
+          jailEl.classList.remove("life");
+        }
+        document.getElementById("totalFine").textContent = formatMoney(
+          t.totalFine,
+        );
+        document.getElementById("totalPoints").textContent = t.totalPoints;
+
+        const detEl = document.getElementById("detailList");
+        if (t.details.length === 0) {
+          detEl.innerHTML = '<div class="empty">Belum ada kode dipilih</div>';
+        } else {
+          detEl.innerHTML = t.details
+            .map(({ p, data, fine }) => {
+              const levelTxt = p.vary && data.level ? ` (Lv${data.level})` : "";
+              return `<div class="selected-item">
+        <span class="name">${catShort(p.category)} ${escapeHtml(p.code)}${levelTxt}
+          <span class="badge ${typeClass(p.type)}">${typeShort(p.type)}</span></span>
+        <span class="val">${p.life ? "LIFE" : formatJail(p.jail)} • ${formatMoney(fine)}${p.points ? " • " + p.points + "p" : ""}</span>
+      </div>`;
+            })
+            .join("");
+        }
+
+        renderSuspectTabs();
+        renderAllSummary();
+      }
+
+      // ==================== SUSPECT CRUD ====================
+      function addSuspect() {
+        const name = prompt(
+          "Nama suspect:",
+          "Suspect " + (suspects.length + 1),
+        );
+        if (name === null) return;
+        const trimmed =
+          (name || "").trim() || "Suspect " + (suspects.length + 1);
+        const s = { id: genId("s"), name: trimmed, selected: {} };
+        suspects.push(s);
+        activeSuspectId = s.id;
+        saveSuspects();
+        renderCalc(document.getElementById("searchCalc").value);
+        updateTotals();
+        toast("✅ Suspect ditambahkan");
+      }
+      function renameSuspect() {
+        const s = getActiveSuspect();
+        if (!s) return;
+        const name = prompt("Nama baru:", s.name);
+        if (name === null) return;
+        s.name = (name || "").trim() || s.name;
+        saveSuspects();
+        updateTotals();
+        toast("✅ Nama diperbarui");
+      }
+      function deleteSuspect() {
+        if (suspects.length <= 1) {
+          toast("⚠️ Minimal 1 suspect");
+          return;
+        }
+        const s = getActiveSuspect();
+        if (!s) return;
+        if (!confirm(`Hapus suspect "${s.name}"?`)) return;
+        suspects = suspects.filter((x) => x.id !== s.id);
+        activeSuspectId = suspects[0].id;
+        saveSuspects();
+        renderCalc(document.getElementById("searchCalc").value);
+        updateTotals();
+        toast("🗑️ Suspect dihapus");
+      }
+
+      // ==================== RESTART ====================
+      function restartApp() {
+        const jumlahSuspect = suspects.length;
+        const ok = confirm(
+          "⚠️  PERINGATAN  ⚠️\n\n" +
+            "Restart akan MENGHAPUS SEMUA data berikut:\n" +
+            "  • " +
+            jumlahSuspect +
+            " suspect beserta namanya\n" +
+            "  • Semua penal code yang sedang dipilih\n" +
+            "  • Semua perubahan/edit pada daftar kode\n\n" +
+            "Daftar kode akan dikembalikan ke DEFAULT.\n\n" +
+            "⚠️  Tindakan ini TIDAK BISA dibatalkan!\n\n" +
+            "Yakin ingin restart aplikasi?",
+        );
+        if (!ok) return;
+
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(SUSPECT_KEY);
+          localStorage.removeItem(ACTIVE_SUSPECT_KEY);
+          localStorage.removeItem("penalcode_data_v1");
+          localStorage.removeItem("penalcode_data_v2");
+          localStorage.removeItem("penalcode_selected_v1");
+          localStorage.removeItem("penalcode_selected_v2");
+          localStorage.removeItem("penalcode_case_v2");
+        } catch (e) {}
+
+        sessionStorage.clear();
+        location.reload();
+      }
+
+      // ==================== PENAL CODE CRUD ====================
+      function savePc() {
+        const id = document.getElementById("editId").value;
+        const category = document.getElementById("inpCat").value;
+        const code = document.getElementById("inpCode").value.trim();
+        const type = document.getElementById("inpType").value;
+        const desc = document.getElementById("inpDesc").value.trim();
+        const jail = Number(document.getElementById("inpJail").value) || 0;
+        const fine = Number(document.getElementById("inpFine").value) || 0;
+        const points = Number(document.getElementById("inpPoints").value) || 0;
+        const life = document.getElementById("inpLife").checked;
+        if (!code) {
+          toast("Kode wajib diisi!");
+          return;
+        }
+
+        if (id) {
+          const idx = pcs.findIndex((p) => p.id === id);
+          if (idx >= 0)
+            pcs[idx] = {
+              ...pcs[idx],
+              category,
+              code,
+              type,
+              desc,
+              jail,
+              fine,
+              points,
+              life,
+            };
+          toast("✅ Diperbarui");
+        } else {
+          pcs.push({
+            id: genId("pc"),
+            category,
+            code,
+            type,
+            desc,
+            jail,
+            fine,
+            points,
+            life,
+          });
+          toast("✅ Ditambahkan");
+        }
+        saveData();
+        clearForm();
+        renderManage(document.getElementById("searchManage").value);
+        renderCalc(document.getElementById("searchCalc").value);
+        renderInfo(document.getElementById("searchInfo").value);
+        updateTotals();
+      }
+
+      function editPc(id) {
+        const p = pcs.find((x) => x.id === id);
+        if (!p) return;
+        document.getElementById("editId").value = p.id;
+        document.getElementById("inpCat").value = p.category || "PC";
+        document.getElementById("inpCode").value = p.code;
+        document.getElementById("inpType").value = p.type || "Misdemeanor";
+        document.getElementById("inpDesc").value = p.desc || "";
+        document.getElementById("inpJail").value = p.jail || 0;
+        document.getElementById("inpFine").value = p.fine || 0;
+        document.getElementById("inpPoints").value = p.points || 0;
+        document.getElementById("inpLife").checked = !!p.life;
+        document.getElementById("formTitleText").textContent = "✏️ Edit Kode";
+        document.getElementById("btnSave").textContent = "💾 Update";
+        document.getElementById("btnCancel").style.display = "inline-block";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function deletePc(id) {
+        if (!confirm("Yakin hapus kode ini?")) return;
+        pcs = pcs.filter((p) => p.id !== id);
+        suspects.forEach((s) => {
+          if (s.selected) delete s.selected[id];
+        });
+        saveData();
+        saveSuspects();
+        renderManage(document.getElementById("searchManage").value);
+        renderCalc(document.getElementById("searchCalc").value);
+        renderInfo(document.getElementById("searchInfo").value);
+        updateTotals();
+        toast("🗑️ Dihapus");
+      }
+
+      function clearForm() {
+        ["editId", "inpCode", "inpDesc"].forEach(
+          (i) => (document.getElementById(i).value = ""),
+        );
+        document.getElementById("inpCat").value = "PC";
+        document.getElementById("inpType").value = "Misdemeanor";
+        document.getElementById("inpJail").value = 0;
+        document.getElementById("inpFine").value = 0;
+        document.getElementById("inpPoints").value = 0;
+        document.getElementById("inpLife").checked = false;
+        document.getElementById("formTitleText").textContent = "➕ Tambah Kode";
+        document.getElementById("btnSave").textContent = "💾 Simpan";
+        document.getElementById("btnCancel").style.display = "none";
+      }
+
+      function resetDefault() {
+        if (
+          !confirm(
+            "Reset semua kode ke daftar default? Perubahan Anda akan hilang.",
+          )
+        )
+          return;
+        pcs = assignIds(JSON.parse(JSON.stringify(ALL_DEFAULT)));
+        saveData();
+        renderManage();
+        renderCalc();
+        renderInfo();
+        updateTotals();
+        toast("↺ Direset ke default");
+      }
+      function clearAll() {
+        if (!confirm("Hapus SEMUA kode?")) return;
+        pcs = [];
+        saveData();
+        renderManage();
+        renderCalc();
+        renderInfo();
+        updateTotals();
+        toast("🗑️ Semua kode dihapus");
+      }
+      function resetSelection() {
+        const s = getActiveSuspect();
+        if (!s) return;
+        if (!confirm(`Reset pilihan untuk "${s.name}"?`)) return;
+        s.selected = {};
+        saveSuspects();
+        renderCalc(document.getElementById("searchCalc").value);
+        updateTotals();
+        toast("🔄 Pilihan direset");
+      }
+
+      // ==================== PASSWORD ====================
+      function isManageUnlocked() {
+        return sessionStorage.getItem(AUTH_KEY) === "unlocked";
+      }
+      function requestManageAccess(callback) {
+        if (isManageUnlocked()) {
+          if (callback) callback();
+          return;
+        }
+        showPasswordModal(callback);
+      }
+      function showPasswordModal(callback) {
+        const modal = document.getElementById("passwordModal");
+        const input = document.getElementById("passwordInput");
+        const err = document.getElementById("passwordError");
+        err.classList.remove("show");
+        input.value = "";
+        modal.classList.add("show");
+        modal._callback = callback || null;
+        setTimeout(() => input.focus(), 100);
+      }
+      function closePasswordModal() {
+        const modal = document.getElementById("passwordModal");
+        modal.classList.remove("show");
+        modal._callback = null;
+        document.getElementById("passwordInput").value = "";
+        document.getElementById("passwordError").classList.remove("show");
+      }
+      function submitPassword() {
+        const input = document.getElementById("passwordInput");
+        const err = document.getElementById("passwordError");
+        const val = input.value;
+
+        if (val === MANAGE_PASSWORD) {
+          sessionStorage.setItem(AUTH_KEY, "unlocked");
+          const cb = document.getElementById("passwordModal")._callback;
+          closePasswordModal();
+          toast("🔓 Akses diberikan");
+          if (cb) cb();
+        } else {
+          err.classList.add("show");
+          input.value = "";
+          input.focus();
+          input.style.borderColor = "#e53935";
+          setTimeout(() => {
+            input.style.borderColor = "";
+          }, 800);
+        }
+      }
+      function lockManage() {
+        sessionStorage.removeItem(AUTH_KEY);
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".panel")
+          .forEach((p) => p.classList.remove("active"));
+        document.querySelector('.tab[data-tab="calc"]').classList.add("active");
+        document.getElementById("panel-calc").classList.add("active");
+        toast("🔒 Manajemen dikunci");
+      }
+
+      // ==================== COPY LAPORAN ====================
+      function buildSuspectReport(s) {
+        const t = computeSuspectTotals(s);
+        const lines = [];
+        let no = 1;
+        t.details.forEach(({ p, data, fine }) => {
+          const levelTxt = p.vary && data.level ? ` (Level ${data.level})` : "";
+          const jailTxt = p.life
+            ? "SEUMUR HIDUP"
+            : p.jail > 0
+              ? formatJail(p.jail)
+              : "-";
+          const ptsTxt = p.points > 0 ? ` | ${p.points} poin` : "";
+          lines.push(
+            `${no}. ${p.category} ${p.code}${levelTxt} — ${p.desc || "-"}`,
+          );
+          lines.push(
+            `   Jail: ${jailTxt} | Denda: ${formatMoney(fine)}${ptsTxt}`,
+          );
+          no++;
+        });
+        const jailSummary = t.hasLife
+          ? "SEUMUR HIDUP"
+          : formatJail(t.totalJail);
+        return `── SUSPECT: ${s.name} ──
+Pelanggaran:
+${lines.length ? lines.join("\n") : "(tidak ada)"}
+
+Total Jail  : ${jailSummary}
+Total Denda : ${formatMoney(t.totalFine)}
+Poin SIM    : ${t.totalPoints}
+Jumlah Pasal: ${t.count}`;
+      }
+
+      function copyReport() {
+        const s = getActiveSuspect();
+        if (!s) {
+          toast("⚠️ Tidak ada suspect");
+          return;
+        }
+        const t = computeSuspectTotals(s);
+        if (t.count === 0) {
+          toast("⚠️ Belum ada kode dipilih");
+          return;
+        }
+        const now = new Date();
+        const tgl = now.toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+        const jam = now.toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const report = `═══════════════════════════════════
+   LAPORAN PENAL & VEHICLE CODE
+═══════════════════════════════════
+Tanggal: ${tgl} ${jam}
+
+${buildSuspectReport(s)}
+═══════════════════════════════════`;
+        copyToClipboard(report, "📋 Laporan disalin");
+      }
+
+      function copyAllReport() {
+        if (suspects.length === 0) {
+          toast("⚠️ Belum ada suspect");
+          return;
+        }
+        const totalCount = suspects.reduce(
+          (sum, s) => sum + computeSuspectTotals(s).count,
+          0,
+        );
+        if (totalCount === 0) {
+          toast("⚠️ Belum ada kode dipilih");
+          return;
+        }
+        const now = new Date();
+        const tgl = now.toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+        const jam = now.toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const blocks = suspects.map((s) => buildSuspectReport(s)).join("\n\n");
+        const report = `═══════════════════════════════════
+   LAPORAN SEMUA SUSPECT
+═══════════════════════════════════
+Tanggal: ${tgl} ${jam}
+Jumlah Suspect: ${suspects.length}
+
+${blocks}
+═══════════════════════════════════`;
+        copyToClipboard(report, "📋 Laporan semua suspect disalin");
+      }
+
+      function copyToClipboard(text, successMsg) {
+        if (navigator.clipboard) {
+          navigator.clipboard
+            .writeText(text)
+            .then(() => toast(successMsg))
+            .catch(() => fallbackCopy(text, successMsg));
+        } else fallbackCopy(text, successMsg);
+      }
+      function fallbackCopy(text, msg) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand("copy");
+          toast(msg);
+        } catch (e) {
+          toast("❌ Gagal copy");
+          console.log(text);
+        }
+        document.body.removeChild(ta);
+      }
+
+      // ==================== UTIL ====================
+      function escapeHtml(s) {
+        return String(s == null ? "" : s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+      let toastTimer;
+      function toast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+      }
+
+      // ==================== EVENTS ====================
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          if (tab.dataset.tab === "manage") {
+            requestManageAccess(() => {
+              document
+                .querySelectorAll(".tab")
+                .forEach((t) => t.classList.remove("active"));
+              document
+                .querySelectorAll(".panel")
+                .forEach((p) => p.classList.remove("active"));
+              tab.classList.add("active");
+              document.getElementById("panel-manage").classList.add("active");
+              renderManage(document.getElementById("searchManage").value);
+            });
+            return;
+          }
+          document
+            .querySelectorAll(".tab")
+            .forEach((t) => t.classList.remove("active"));
+          document
+            .querySelectorAll(".panel")
+            .forEach((p) => p.classList.remove("active"));
+          tab.classList.add("active");
+          document
+            .getElementById("panel-" + tab.dataset.tab)
+            .classList.add("active");
+          if (tab.dataset.tab === "calc") updateTotals();
+          if (tab.dataset.tab === "info")
+            renderInfo(document.getElementById("searchInfo").value);
+        });
+      });
+
+      document.querySelectorAll("#filterCalc .filter-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          document
+            .querySelectorAll("#filterCalc .filter-chip")
+            .forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          currentFilter = chip.dataset.filter;
+          renderCalc(document.getElementById("searchCalc").value);
+        });
+      });
+      document.querySelectorAll("#filterCat .filter-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          document
+            .querySelectorAll("#filterCat .filter-chip")
+            .forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          currentCat = chip.dataset.cat;
+          renderCalc(document.getElementById("searchCalc").value);
+        });
+      });
+
+      document
+        .querySelectorAll("#filterTypeInfo .filter-chip")
+        .forEach((chip) => {
+          chip.addEventListener("click", () => {
+            document
+              .querySelectorAll("#filterTypeInfo .filter-chip")
+              .forEach((c) => c.classList.remove("active"));
+            chip.classList.add("active");
+            currentFilterInfo = chip.dataset.filter;
+            renderInfo(document.getElementById("searchInfo").value);
+          });
+        });
+      document
+        .querySelectorAll("#filterCatInfo .filter-chip")
+        .forEach((chip) => {
+          chip.addEventListener("click", () => {
+            document
+              .querySelectorAll("#filterCatInfo .filter-chip")
+              .forEach((c) => c.classList.remove("active"));
+            chip.classList.add("active");
+            currentCatInfo = chip.dataset.cat;
+            renderInfo(document.getElementById("searchInfo").value);
+          });
+        });
+
+      document
+        .getElementById("searchCalc")
+        .addEventListener("input", (e) => renderCalc(e.target.value));
+      document
+        .getElementById("searchManage")
+        .addEventListener("input", (e) => renderManage(e.target.value));
+      document
+        .getElementById("searchInfo")
+        .addEventListener("input", (e) => renderInfo(e.target.value));
+
+      document
+        .getElementById("passwordInput")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter") submitPassword();
+          if (e.key === "Escape") closePasswordModal();
+        });
+      document
+        .getElementById("passwordModal")
+        .addEventListener("click", (e) => {
+          if (e.target.id === "passwordModal") closePasswordModal();
+        });
+
+      // ==================== INIT ====================
+      loadData();
+      renderCalc();
+      renderManage();
+      updateTotals();
+      renderInfo();
+
+      // Paksa selalu mulai dari tab Kalkulator
+      document
+        .querySelectorAll(".tab")
+        .forEach((t) => t.classList.remove("active"));
+      document
+        .querySelectorAll(".panel")
+        .forEach((p) => p.classList.remove("active"));
+      document.querySelector('.tab[data-tab="calc"]').classList.add("active");
+      document.getElementById("panel-calc").classList.add("active");
+    </script>
+  </body>
+</html>
