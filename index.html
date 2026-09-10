@@ -3087,8 +3087,9 @@ html { scroll-behavior: smooth; }
       // 🔑  PASSWORD UNTUK MANAJEMEN KODE
       //     GANTI dengan password rahasia Anda!
       // ============================================
-      const MANAGE_PASSWORD = "rinalfemboy2029";
-      const AUTH_KEY = "penalcode_manage_auth";
+const MANAGE_PASSWORD_HASH = 'b4e4d6b294aece0dde24faecda69fe13bbb76ae56b3063c96ae17d68df25a18c';
+const AUTH_KEY = 'penalcode_manage_auth';
+const AUTO_LOCK_MS = 120000; // 2 menit idle → auto-kunci
 
       const STORAGE_KEY = "penalcode_data_v3";
       const SUSPECT_KEY = "penalcode_suspects_v3";
@@ -3766,15 +3767,12 @@ html { scroll-behavior: smooth; }
 
       // ==================== PASSWORD ====================
       function isManageUnlocked() {
-        return sessionStorage.getItem(AUTH_KEY) === "unlocked";
-      }
-      function requestManageAccess(callback) {
-        if (isManageUnlocked()) {
-          if (callback) callback();
-          return;
-        }
-        showPasswordModal(callback);
-      }
+  return false;
+}
+function requestManageAccess(callback) {
+  if (isManageUnlocked()) { if (callback) callback(); return; }
+  showPasswordModal(callback);
+}
       function showPasswordModal(callback) {
         const modal = document.getElementById("passwordModal");
         const input = document.getElementById("passwordInput");
@@ -3792,39 +3790,81 @@ html { scroll-behavior: smooth; }
         document.getElementById("passwordInput").value = "";
         document.getElementById("passwordError").classList.remove("show");
       }
-      function submitPassword() {
-        const input = document.getElementById("passwordInput");
-        const err = document.getElementById("passwordError");
-        const val = input.value;
+// ============================================
+// 🔐  LAPIS 2: HASH SHA-256
+// ============================================
+async function sha256(text) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
-        if (val === MANAGE_PASSWORD) {
-          sessionStorage.setItem(AUTH_KEY, "unlocked");
-          const cb = document.getElementById("passwordModal")._callback;
-          closePasswordModal();
-          toast("🔓 Akses diberikan");
-          if (cb) cb();
-        } else {
-          err.classList.add("show");
-          input.value = "";
-          input.focus();
-          input.style.borderColor = "#e53935";
-          setTimeout(() => {
-            input.style.borderColor = "";
-          }, 800);
-        }
-      }
-      function lockManage() {
-        sessionStorage.removeItem(AUTH_KEY);
-        document
-          .querySelectorAll(".tab")
-          .forEach((t) => t.classList.remove("active"));
-        document
-          .querySelectorAll(".panel")
-          .forEach((p) => p.classList.remove("active"));
-        document.querySelector('.tab[data-tab="calc"]').classList.add("active");
-        document.getElementById("panel-calc").classList.add("active");
-        toast("🔒 Manajemen dikunci");
-      }
+async function submitPassword() {
+  const input = document.getElementById('passwordInput');
+  const err = document.getElementById('passwordError');
+  const btnSubmit = document.querySelector('#passwordModal .btn-primary');
+  const val = input.value;
+
+  if (!val) {
+    err.textContent = '❌ Password tidak boleh kosong!';
+    err.classList.add('show');
+    return;
+  }
+
+  // Disable button sementara
+  if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.textContent = '⏳ Memeriksa...'; }
+
+  try {
+    const hash = await sha256(val);
+    if (hash === MANAGE_PASSWORD_HASH) {
+      const cb = document.getElementById('passwordModal')._callback;
+      closePasswordModal();
+      toast('🔓 Akses diberikan');
+      startManageAutoLock(); // Lapis 4: mulai auto-lock timer
+      if (cb) cb();
+    } else {
+      err.textContent = '❌ Password salah! Coba lagi.';
+      err.classList.add('show');
+      input.value = '';
+      input.focus();
+      input.style.borderColor = '#e53935';
+      setTimeout(() => { input.style.borderColor = ''; }, 800);
+    }
+  } catch (e) {
+    err.textContent = '❌ Terjadi kesalahan. Coba lagi.';
+    err.classList.add('show');
+    console.error(e);
+  } finally {
+    if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.textContent = '🔓 Buka'; }
+  }
+}
+let manageTimeout = null;
+
+function startManageAutoLock() {
+  if (manageTimeout) clearTimeout(manageTimeout);
+  manageTimeout = setTimeout(() => {
+    if (document.getElementById('panel-manage').classList.contains('active')) {
+      lockManage();
+      toast('🔒 Auto-lock: 2 menit tidak ada aktivitas');
+    }
+  }, AUTO_LOCK_MS);
+}
+
+function stopManageAutoLock() {
+  if (manageTimeout) { clearTimeout(manageTimeout); manageTimeout = null; }
+}
+
+function lockManage() {
+  stopManageAutoLock();
+  sessionStorage.removeItem(AUTH_KEY);
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('.tab[data-tab="calc"]').classList.add('active');
+  document.getElementById('panel-calc').classList.add('active');
+  toast('🔒 Manajemen dikunci');
+}
 
       // ==================== COPY LAPORAN ====================
       function buildSuspectReport(s) {
@@ -4067,6 +4107,22 @@ ${blocks}
         .addEventListener("click", (e) => {
           if (e.target.id === "passwordModal") closePasswordModal();
         });
+
+['click', 'keydown', 'input', 'touchstart'].forEach(evt => {
+  document.getElementById('panel-manage').addEventListener(evt, () => {
+    if (document.getElementById('panel-manage').classList.contains('active')) {
+      startManageAutoLock();
+    }
+  }, { passive: true });
+});
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    if (t.dataset.tab !== 'manage') {
+      stopManageAutoLock();
+    }
+  });
+});
 
       // ==================== INIT ====================
       loadData();
