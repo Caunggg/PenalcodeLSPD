@@ -405,3 +405,63 @@ html {
 
 html, body { overflow-x: hidden; max-width: 100vw; }
 html { scroll-behavior: smooth; }
+
+/* ============================================================
+   📋  TOMBOL COPY KODE DI SETIAP KOTAK
+   ============================================================ */
+.btn-copy-code {
+  background: #2a3a4d;
+  color: #4fc3f7;
+  border: 1px solid #4fc3f7;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 26px;
+  line-height: 1;
+  margin-top: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-copy-code:hover {
+  background: #4fc3f7;
+  color: #0f1419;
+}
+.btn-copy-code:active {
+  transform: scale(0.94);
+  background: #4fc3f7;
+  color: #0f1419;
+}
+
+/* Layout header kotak: kode di kiri, tombol copy di kanan */
+.list-item .code-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.list-item .code-row .code {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Mobile: tombol tetap nyaman ditekan */
+@media (max-width: 768px) {
+  .btn-copy-code {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+    min-height: 32px;
+  }
+}
+
+@media (hover: none) {
+  .btn-copy-code:hover { background: #2a3a4d; color: #4fc3f7; }
+}
