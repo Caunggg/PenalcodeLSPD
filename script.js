@@ -151,15 +151,15 @@ const DEFAULT_PCS = [
   { category:'PC', code:'622', type:'Misdemeanor', desc:'Contempt of Court', jail:8, fine:80 },
   { category:'PC', code:'623', type:'Misdemeanor', desc:'Subpoena Violation', jail:8, fine:80 },
   { category:'PC', code:'701', type:'Misdemeanor', desc:'Reckless Driving', jail:20, fine:350 },
-  { category:'PC', code:'702', type:'Felony', desc:'Felony Reckless Driving (suspend lisensi 24 jam)', jail:28, fine:540 },
-  { category:'PC', code:'703(a)', type:'Felony', desc:'DUI - BAC ≥ 0.08% (suspend lisensi 24 jam)', jail:24, fine:246 },
-  { category:'PC', code:'703(b)', type:'Felony', desc:'DUI - pegawai negara saat bertugas (suspend lisensi 24 jam)', jail:30, fine:350 },
-  { category:'PC', code:'703(c)', type:'Felony', desc:'DUI - kendaraan komersial BAC ≥ 0.04% (suspend lisensi 24 jam)', jail:24, fine:542 },
-  { category:'PC', code:'703(d)', type:'Misdemeanor', desc:'DUI - terganggu alkohol / narkoba (suspend lisensi 24 jam)', jail:16, fine:165 },
-  { category:'PC', code:'704', type:'Misdemeanor', desc:'Evading a Peace Officer (suspend lisensi 48 jam)', jail:16, fine:156 },
-  { category:'PC', code:'705', type:'Felony', desc:'Reckless Evading of a Peace Officer (suspend lisensi 60 jam)', jail:36, fine:365 },
-  { category:'PC', code:'706(a)', type:'Felony', desc:'Hit and Run - cedera / kematian (suspend lisensi 24 jam)', jail:35, fine:464 },
-  { category:'PC', code:'706(b)', type:'Misdemeanor', desc:'Hit and Run - hanya kerusakan properti (suspend lisensi 24 jam)', jail:10, fine:154 },
+  { category:'PC', code:'702', type:'Felony', desc:'Felony Reckless Driving (suspend license 24 hours)', jail:28, fine:540 },
+  { category:'PC', code:'703(a)', type:'Felony', desc:'Driving Under the Influence - Blood Alcohol Concentration ≥ 0.08% (suspend license 24 hours)', jail:24, fine:246 },
+  { category:'PC', code:'703(b)', type:'Felony', desc:'Driving Under the Influence - state employee on duty (suspend license 24 hours)', jail:30, fine:350 },
+  { category:'PC', code:'703(c)', type:'Felony', desc:'Driving Under the Influence - commercial vehicle, Blood Alcohol Concentration ≥ 0.04% (suspend license 24 hours)', jail:24, fine:542 },
+  { category:'PC', code:'703(d)', type:'Misdemeanor', desc:'Driving Under the Influence - impaired by alcohol or drugs (suspend license 24 hours)', jail:16, fine:165 },
+  { category:'PC', code:'704', type:'Misdemeanor', desc:'Evading a Peace Officer (suspend license 48 hours)', jail:16, fine:156 },
+  { category:'PC', code:'705', type:'Felony', desc:'Reckless Evading of a Peace Officer (suspend license 60 hours)', jail:36, fine:365 },
+  { category:'PC', code:'706(a)', type:'Felony', desc:'Hit and Run - injury or death (suspend license 24 hours)', jail:35, fine:464 },
+  { category:'PC', code:'706(b)', type:'Misdemeanor', desc:'Hit and Run - property damage only (suspend license 24 hours)', jail:10, fine:154 },
   { category:'PC', code:'801', type:'Misdemeanor', desc:'Brandishing a Firearm - mengancam nyawa', jail:20, fine:1000 },
   { category:'PC', code:'802', type:'Misdemeanor', desc:'Discharging a Firearm in Public', jail:20, fine:500 },
   { category:'PC', code:'802(b)', type:'Felony', desc:'Discharging a Firearm in Public - menyebabkan cedera (eskalasi)', jail:40, fine:1500 },
@@ -368,15 +368,15 @@ const EXPLANATIONS = {
   'PC-622': `Seseorang yang dengan sengaja tidak mematuhi <b>perintah lisan/tertulis dari otoritas pengadilan</b>, tidak menghormati tata krama pengadilan, atau melanggar proses hukum lainnya.`,
   'PC-623': `Seseorang yang mengabaikan atau melanggar <b>perintah subpoena</b> yang dikeluarkan oleh Pengadilan.`,
   'PC-701': `Seseorang yang mengemudikan kendaraan di jalan umum/raya dengan sengaja atau sembarangan mengabaikan <b>keamanan</b> orang atau harta benda.`,
-  'PC-702': `Mengemudikan kendaraan dengan sengaja/sembarangan mengabaikan keamanan seperti hampir menabrak pejalan kaki, memasuki jalur pejalan kaki, atau hampir menyebabkan bahaya serius; menggunakan kendaraan berbahaya bagi penumpang/pejalan kaki; mengemudi di jalur berlawanan; menyebabkan cedera fisik. <b>+ suspend lisensi 24 jam.</b>`,
-  'PC-703(a)': `Mengemudikan kendaraan di bawah pengaruh <b>alkohol</b> dengan kadar alkohol <b>0,08%</b> atau lebih. <b>+ suspend lisensi 24 jam.</b>`,
-  'PC-703(b)': `<b>Pegawai negara</b> yang mengemudikan kendaraan di bawah pengaruh narkoba/alkohol saat bertugas. <b>+ suspend lisensi 24 jam.</b>`,
-  'PC-703(c)': `Mengemudikan <b>kendaraan komersial</b> saat di bawah pengaruh narkoba atau memiliki kadar alkohol <b>0,04%</b> atau lebih. <b>+ suspend lisensi 24 jam.</b>`,
-  'PC-703(d)': `Mengemudikan kendaraan saat <b>terganggu</b> oleh alkohol, narkoba, atau kombinasi keduanya. <b>+ suspend lisensi 24 jam.</b>`,
-  'PC-704': `Saat mengoperasikan kendaraan bermotor, dengan sengaja <b>melarikan diri</b> atau berusaha menghindar dari kendaraan petugas keamanan yang mengejarnya. <b>+ suspend lisensi 48 jam.</b>`,
-  'PC-705': `Saat mengoperasikan kendaraan bermotor, melarikan diri atau berusaha menghindar dari petugas keamanan sambil mengemudikan kendaraan secara <b>ceroboh</b> atau <b>berbahaya</b>. <b>+ suspend lisensi 60 jam.</b>`,
-  'PC-706(a)': `Mengoperasikan kendaraan bermotor dan terlibat dalam <b>kecelakaan</b> yang mengakibatkan <b>cedera</b> atau <b>kematian</b> orang lain, dan tidak segera menghentikan kendaraan di lokasi kecelakaan. <b>+ suspend lisensi 24 jam.</b>`,
-  'PC-706(b)': `Mengoperasikan kendaraan bermotor dan terlibat dalam kecelakaan yang hanya mengakibatkan <b>kerusakan harta benda</b>, dan tidak segera menghentikan kendaraan di lokasi. <b>+ suspend lisensi 24 jam.</b>`,
+  'PC-702': `A person who drives a vehicle on a public road or highway with willful or wanton disregard for the <b>safety</b> of persons or property, such as nearly striking a pedestrian, entering a pedestrian walkway, or nearly causing serious harm to other drivers; or uses the vehicle in a manner dangerous to passengers, pedestrians, or the surrounding community; or drives on a busy sidewalk or plaza, or in the opposing lane of traffic with or without oncoming vehicles, or in the opposing lane of traffic on a freeway or highway; or causes <b>bodily injury</b>. <b>+ license suspension for 24 hours.</b>`,
+  'PC-703(a)': `A person who drives a vehicle while <b>under the influence of alcohol</b> with a <b>Blood Alcohol Concentration</b> of <b>0.08 percent</b> or more in their blood. <b>+ license suspension for 24 hours.</b>`,
+  'PC-703(b)': `Any <b>state employee</b> who drives a vehicle under the influence of <b>drugs or alcohol</b> while on <b>duty</b> as a state employee, OR operates a state-owned vehicle while under the influence of drugs or alcohol. <b>+ license suspension for 24 hours.</b>`,
+  'PC-703(c)': `A person who drives a <b>commercial vehicle</b> while under the influence of drugs or with a <b>Blood Alcohol Concentration</b> of <b>0.04 percent</b> or more in their blood. <b>+ license suspension for 24 hours.</b>`,
+  'PC-703(d)': `A person who drives a vehicle while <b>impaired</b> by alcohol, drugs, or a combination of both. <b>+ license suspension for 24 hours.</b>`,
+  'PC-704': `A person who, while operating a <b>motor vehicle</b>, willfully flees or attempts to evade a <b>peace officer</b> who is pursuing them. <b>+ license suspension for 48 hours.</b>`,
+  'PC-705': `A person who, while operating a <b>motor vehicle</b>, flees or attempts to evade a <b>peace officer</b> while driving the vehicle in a <b>reckless</b> or <b>dangerous</b> manner. <b>+ license suspension for 60 hours.</b>`,
+  'PC-706(a)': `A person who operates a <b>motor vehicle</b> and is involved in an <b>accident</b> resulting in <b>injury</b> to another person other than themselves, or causing the <b>death</b> of another person, and fails to immediately stop the vehicle at the scene of the accident. <b>+ license suspension for 24 hours.</b>`,
+  'PC-706(b)': `A person who operates a <b>motor vehicle</b> and is involved in an accident resulting only in <b>property damage</b> to another vehicle or property, and fails to immediately stop the vehicle at the scene of the accident. <b>+ license suspension for 24 hours.</b>`,
   'PC-801': `Tindakan dengan sengaja <b>mengeluarkan</b>, <b>menampilkan</b>, atau <b>menunjukan</b> senjata api atau senjata mematikan dengan tujuan untuk <b>mengancam nyawa</b> 1 orang atau lebih.`,
   'PC-802': `Setiap tindakan seseorang yang dengan sengaja <b>menembakkan senjata api</b> di tempat umum atau gedung pemerintahan tanpa alasan jelas, dan bisa membahayakan nyawa orang lain atau tidak.<br><br><b>Pengecualian:</b> (a) Tidak berlaku untuk bela diri atau petugas berwenang. (b) Jika menyebabkan cedera → naikkan ke felony 802(b).`,
   'PC-802(b)': `<b>Eskalasi dari 802:</b> Jika tembakan menyebabkan cedera fisik pada orang lain, naikkan dari misdemeanor ke felony (40 menit, $1.500).`,
@@ -550,11 +550,14 @@ function renderCalc(filter = '') {
     <div class="list-item">
       <input type="checkbox" data-id="${p.id}" ${isSel ? 'checked' : ''}>
       <div class="info">
-        <div class="code">
-          ${catShort(p.category)} ${escapeHtml(p.code)}
-          <span class="badge ${catClass(p.category)}">${catShort(p.category)}</span>
-          <span class="badge ${typeClass(p.type)}">${typeShort(p.type)}</span>
-          ${p.life ? '<span class="badge life">LIFE</span>' : ''}
+                <div class="code-row">
+          <div class="code">
+            ${catShort(p.category)} ${escapeHtml(p.code)}
+            <span class="badge ${catClass(p.category)}">${catShort(p.category)}</span>
+            <span class="badge ${typeClass(p.type)}">${typeShort(p.type)}</span>
+            ${p.life ? '<span class="badge life">LIFE</span>' : ''}
+          </div>
+          <button class="btn-copy-code" onclick="event.stopPropagation(); copyCode('${p.id}')" title="Copy kode">📋</button>
         </div>
         <div class="desc">${escapeHtml(p.desc || '-')}</div>
         <div class="meta">
@@ -1072,36 +1075,45 @@ function copyReport() {
   if (!s) { toast('⚠️ Tidak ada suspect'); return; }
   const t = computeSuspectTotals(s);
   if (t.count === 0) { toast('⚠️ Belum ada kode dipilih'); return; }
-  const now = new Date();
-  const tgl = now.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
-  const jam = now.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
-  const report = `═══════════════════════════════════
-   LAPORAN PENAL & VEHICLE CODE
-═══════════════════════════════════
-Tanggal: ${tgl} ${jam}
 
-${buildSuspectReport(s)}
-═══════════════════════════════════`;
-  copyToClipboard(report, '📋 Laporan disalin');
+  // Ganti spasi jadi _ untuk nama
+  const nama = s.name.trim().replace(/\s+/g, '_');
+  // Kalau ada life sentence, pakai angka besar sebagai representasi (misal 9999 menit)
+  const totalMenit = t.hasLife ? 9999 : t.totalJail;
+  const totalDenda = t.totalFine;
+
+  const command = `/arrest ${nama} ${totalMenit} ${totalDenda}`;
+  copyToClipboard(command, '📋 Command /arrest disalin');
 }
 
 function copyAllReport() {
   if (suspects.length === 0) { toast('⚠️ Belum ada suspect'); return; }
   const totalCount = suspects.reduce((sum, s) => sum + computeSuspectTotals(s).count, 0);
   if (totalCount === 0) { toast('⚠️ Belum ada kode dipilih'); return; }
-  const now = new Date();
-  const tgl = now.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
-  const jam = now.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
-  const blocks = suspects.map(s => buildSuspectReport(s)).join('\n\n');
-  const report = `═══════════════════════════════════
-   LAPORAN SEMUA SUSPECT
-═══════════════════════════════════
-Tanggal: ${tgl} ${jam}
-Jumlah Suspect: ${suspects.length}
 
-${blocks}
-═══════════════════════════════════`;
-  copyToClipboard(report, '📋 Laporan semua suspect disalin');
+  // Filter hanya suspect yang ada kode dipilih
+  const commands = suspects
+    .filter(s => computeSuspectTotals(s).count > 0)
+    .map(s => {
+      const t = computeSuspectTotals(s);
+      const nama = s.name.trim().replace(/\s+/g, '_');
+      const totalMenit = t.hasLife ? 9999 : t.totalJail;
+      const totalDenda = t.totalFine;
+      return `/arrest ${nama} ${totalMenit} ${totalDenda}`;
+    })
+    .join('\n');
+
+  copyToClipboard(commands, '📋 Semua command /arrest disalin');
+}
+
+// ============================================
+// 📋  COPY KODE PENAL/VEHICLE
+// ============================================
+function copyCode(pcId) {
+  const p = pcs.find(x => x.id === pcId);
+  if (!p) { toast('⚠️ Kode tidak ditemukan'); return; }
+  const text = `${p.code}. ${p.desc || ''}`.trim();
+  copyToClipboard(text, `📋 "${text}" disalin`);
 }
 
 function copyToClipboard(text, successMsg) {
